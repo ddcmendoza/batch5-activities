@@ -1,0 +1,124 @@
+
+*{
+    font-family: "Lucida Handwriting";
+    text-shadow: 1.5px 1.5px .75px #512DA8, -1.5px -1.5px .75px #B388FF;
+    color: #FFEA00;
+}
+
+
+body{
+    background-color: #7C4DFF;
+    background: url("./img/bg.png");
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-size: 100%;
+    
+}
+div{
+    opacity: 95%;
+}
+div#title{
+    text-align: center;
+}
+
+div#section, div#title{
+    border: 2px solid #757575;
+    margin: .5em;
+    border-radius: 1.5em;
+    box-shadow: 5px 5px 2.5px #B388FF, -5px -5px 2.5px #512DA8 ;
+    background-color: #757575;
+    padding-left: 1em;
+    padding-top: 1em;
+
+}
+div#section{
+    width: 50%;
+}
+div#container {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+}
+h1
+{
+    
+    margin-top: 0;
+    border-radius: 1em;
+    text-decoration: underline;
+}
+
+dt{
+    padding: 5px;
+    margin:auto;
+    font-size: 1.5vw;
+}
+
+dd, abbr{
+    font-size: 1vw;
+    font-family: "Courier New";
+    text-align:justify;
+}
+
+abbr, time{
+    font-weight: bold;
+    font-family: "Courier New";
+
+}
+a:hover{
+    background-color: black;
+    opacity: 15%;
+    box-shadow: 1px .5px .5px#B388FF;
+    padding-right: 10px;
+}
+
+
+div#footnote{
+    position: fixed;
+    bottom:1vh;
+    text-align: center;
+    width:100%;
+    background-color: #757575;
+    font-size: 1.5vh;
+    margin: 0;
+    padding: 0;
+    font-family: "Courier New";
+    border-radius: .5em;
+    box-shadow: 1px .5px .5px #B388FF;
+}
+@media screen and (orientation:portrait){
+    div#container{
+        flex-direction: column;
+    }
+    div#section{
+        width: 95vw;
+    }
+    dd, abbr{
+        font-size: 1vh;
+        padding: .5em;
+        
+    }
+    dt, div#title{
+
+        font-size: 1.5vh;
+    }
+}
+
+a{
+
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+    0% {
+        text-shadow: 1.5px 1.5px .75px #512DA8, -1.5px -1.5px .75px #B388FF;
+        font-weight: 100;
+    }
+    50% {
+        text-shadow: 5px 5px 2.5px #512DA8, -5px -5px 2.5px #B388FF;
+        font-weight: 500;
+    }
+    100% {
+       text-shadow: 1.5px 1.5px .75px #512DA8, -1.5px -1.5px .75px #B388FF;
+       font-weight: 100;
+    }
+}

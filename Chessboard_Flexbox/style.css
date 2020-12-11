@@ -1,0 +1,113 @@
+*{
+    box-sizing: border-box;
+}
+body {
+    color:white;
+    background-color: black;
+    font-family: monospace;
+}
+
+.board{
+	margin: auto;
+	display: flex;
+	flex-wrap: wrap;
+
+	/* max-width: 900px;
+	max-height: 900px; */
+    width: 80vh;
+    height: 80vh;
+	box-shadow: 0 10px 10px -5px rgba(0,0,0,.75);
+    font-size: 1em;
+    background-color: black;
+
+}
+
+.box{
+	width: 12.5%;
+	height: 12.5%;
+	font-size: 10vh;
+    background-color: grey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* .box:nth-child(n+1):nth-child(-n+16){
+	color: #222;
+} */
+
+.board .box:nth-child(n+1):nth-child(-n+8):nth-child(even),
+.board .box:nth-child(n+17):nth-child(-n+25):nth-child(even),
+.board .box:nth-child(n+33):nth-child(-n+40):nth-child(even),
+.board .box:nth-child(n+49):nth-child(-n+56):nth-child(even),
+.board .box:nth-child(n+9):nth-child(-n+16):nth-child(odd),
+.board .box:nth-child(n+25):nth-child(-n+32):nth-child(odd),
+.board .box:nth-child(n+41):nth-child(-n+48):nth-child(odd),
+.board .box:nth-child(n+57):nth-child(-n+64):nth-child(odd){
+    background-color: rgba(0,125,0,.5);
+    
+}
+
+.box:hover{
+    background-color:  rgba(125,125,025,.2)!important;
+    cursor: pointer;
+}
+
+div#navbar{
+    position: fixed;
+    top:0;
+    left:0;
+    color: black;
+    font-size: 1.5vw;
+    
+}
+div#functions{
+    position: fixed;
+    top:5vw;
+    left:0vw;
+    color: white;
+    font-size: 1.5vw;
+    display: block;
+}
+div#functions div:hover{
+    cursor:pointer;
+    background:grey;
+}
+@media screen and (orientation:portrait){
+    .board{
+        width: 80vw;
+	    height: 80vw;
+    }
+    .box{
+        font-size:10vw;
+    }
+    div#functions{
+        position: fixed;
+        top:85vh;
+        left:30vw;
+        color: white;
+        font-size: 3vh;
+    }
+}
+@media screen and (orientation:landscape){
+    .board{
+        width: 80vh;
+	    height: 80vh;
+    }
+    .box{
+        font-size:10vh;
+    }
+    div#functions{
+        position: fixed;
+        top:5vw;
+        left:0vw;
+        color: white;
+        font-size: 1.5vw;
+    }
+}
+
+div#footnote{
+    text-align: center;
+    background: none;
+    font-size:1.5vh;
+}

@@ -1,0 +1,130 @@
+div{
+    background: gray;
+    color: white;
+    
+}
+
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url("./img/bg.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 120% ;
+    background-color: gray;
+}
+
+div#main{
+    display: flex;
+    flex-flow: column;
+    border: 1px solid white;
+    border-radius: 4em;
+    font-family: monospace;
+    width: 85%;
+    opacity: 95%;
+    box-shadow: 10px 10px 5px dimgray ;
+}
+
+div#img-div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+
+}
+
+#img-div img {
+    width: 45%;
+    box-shadow: 1px 1px 10px dimgray;
+    background-color: lightgray ;
+    border-radius: 50%;
+}
+
+div#img-caption{
+    text-align: justify;
+    padding: 1px;
+    margin-top:0;
+}
+
+h1#title{
+    text-align: center;
+    font-size: 40px;
+    text-shadow: 2px 2px 4px #000000;
+
+}
+
+div#article{
+    border: 2px solid floralwhite;
+    border-radius: 4em;
+    margin: 1em;
+    padding: 2em;
+}
+
+span#subtitle{
+    font-size: 10px;
+}
+
+span#subtitle:hover{
+    font-size: 20px;
+}
+p#img-caption {
+    margin-top: 1px;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-bottom: 0px;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+p#article{
+    text-align: justify;
+    font-size: 18px;
+    line-height: 20px;
+}
+p#article::first-letter{
+    font-size: 22px;
+}
+h1#article{
+    font-size: 32px;
+}
+h2#article{
+    font-size: 28px;
+}
+h3#article{
+    font-size: 24px;
+}
+ol#article{
+    background-color: dimgray;
+    padding: 2em;
+}
+#article {
+    text-shadow: 1.5px 1px 2px #000000;
+}
+h3#article:hover, h2#article:hover{
+    font-style:italic;
+    font-size: 32px;
+}
+
+li{
+    border: 1px solid gray;
+    border-radius: 1em;
+    padding : 1em;
+    margin: 0.5em;
+}
+div#footnote{
+    text-align: center;
+    background: none;
+}
+
+div#navbar{
+    position: fixed;
+    top:0;
+    left:0;
+}
+@media screen and (orientation:portrait){
+    body{
+        background-size: 120vh;
+        background-position: center;
+
+    }
+}
