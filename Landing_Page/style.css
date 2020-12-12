@@ -6,6 +6,7 @@
 *{
     font-family: GothamMedium;
     color: #393c41;
+    text-align: center;
 
 }
 .col-1 {width: 8.33%;}
@@ -27,12 +28,13 @@ iframe{
 }
 
 .parallax-wrapper{
-    height: 100vh;
+    height: 50vh;
     background-image: url("./img/bg-1.jpg");
     background-attachment: fixed;
     background-position:center;
     background-repeat: no-repeat;
     background-size:cover;
+    opacity:55%;
 }
 .parallax-wrapper-2{
     height: 100vh;
@@ -41,6 +43,7 @@ iframe{
     background-position:center;
     background-repeat: no-repeat;
     background-size:cover;
+    opacity:55%;
 }
 .parallax-wrapper-3{
     height: 100vh;
@@ -49,6 +52,7 @@ iframe{
     background-position:center;
     background-repeat: no-repeat;
     background-size:cover;
+    opacity:55%;
 }
 .row{
     display: flex;
@@ -75,6 +79,7 @@ div#nav-bar{
     background-color: white;
     width: 100%;
     opacity: 85%;
+    z-index: 100;
 }
 
 a.nav-link{
@@ -98,4 +103,11 @@ a.nav-link:hover{
     iframe{
         width:100%;
     }
+}
+#footnote {
+
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
 }
