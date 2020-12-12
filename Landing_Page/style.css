@@ -156,7 +156,7 @@ input#name, input#email{
 
 @keyframes grow{
     from{width:10%;}
-    to{width: 100%;}
+    to{width: 50%;}
 }
 @keyframes focus{
     0%{box-shadow: 1px 1px .5px gray,-1px -1px .5px beige;z-index: 0;}
@@ -168,14 +168,18 @@ input#name, input#email{
         width:100%;
     }
 
-    a.nav-link, a.logo{
+    a.nav-link{
         margin: 0;
         padding: 0.1em;
         order:1;
     }
-
     a.logo{
         order:0;
+        padding:0.1em;
+    }
+
+    a.logo:hover{
+        animation: grow 1.5s forwards;
     }
     textarea{
         width:100%;
