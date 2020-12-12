@@ -136,7 +136,6 @@ dd{
 }
 div.list-item:hover{
     animation: focus 1.5s infinite;
-    z-index: 50;
 }
 a.nav-link:hover, a.logo:hover{
     animation: appear 1.5s forwards;
@@ -160,9 +159,9 @@ input#name, input#email{
     to{width: 100%;}
 }
 @keyframes focus{
-    0%{box-shadow: 1px 1px .5px gray,-1px -1px .5px beige;}
-    50%{box-shadow: 10px 10px 5px gray,-10px -10px 5px beige;}
-    100%{box-shadow: 1px 1px .5px gray,-1px -1px .5px beige;}
+    0%{box-shadow: 1px 1px .5px gray,-1px -1px .5px beige;z-index: 0;}
+    50%{box-shadow: 10px 10px 15px gray,-10px -10px 15px beige;z-index: 500}
+    100%{box-shadow: 1px 1px .5px gray,-1px -1px .5px beige;z-index: 0}
 }
 @media screen and (max-width:640px){
     iframe{
