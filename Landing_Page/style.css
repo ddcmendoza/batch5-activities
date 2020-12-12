@@ -9,6 +9,7 @@
     text-align: center;
     text-shadow: .5px .25px 1px dimgray ;
     font-weight: 500;
+    background-color:#fefefe;
 }
 
 
@@ -97,7 +98,7 @@ div#nav-bar{
     padding:0;
     background-color: white;
     width: 100%;
-    opacity: 75%;
+    opacity: 100%;
     z-index: 100;
 }
 a{
