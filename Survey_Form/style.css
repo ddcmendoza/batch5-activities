@@ -6,3 +6,25 @@
 *{
     font-family: JetBrains;
 }
+
+div#navbar{
+    position: fixed;
+    top:0;
+    left:0;
+}
+
+#footnote {
+
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+.textinput {
+    float: left;
+    width: 100%;
+    min-height: 75px;
+    outline: none;
+    resize: none;
+    border: 1px solid grey;
+}
