@@ -81,13 +81,14 @@
     <form id="form">
         <div class="container">
             <div class="row">
-                <div class="col-6"><label for="name" >Name</label> <input type="text" id="name" name="name" placeholder="Name"></div>
-                <div class="col-6"><label for="email">E-mail address</label> <input type="text" id="email" name="email" placeholder="E-mail"></div>
+                <div class="col-6" id="name"><label for="name" >Name</label> <input type="text" id="name" name="name" placeholder="Name"></div>
+                <div class="col-6" id="email"><label for="email">E-mail address</label> <input type="text" id="email" name="email" placeholder="E-mail"></div>
             </div>
-            <br>
-            <label for="msg">Message</label> <textarea name="msg" rows="10" cols="30" style="resize:none" placeholder="Tell us what you want to know"></textarea>
-            <br>
-            <input type="submit" value="Submit" id="submit" formmethod="GET">
+     
+           <div class="col-12">
+                <label for="msg">Message</label> <textarea name="msg" rows="10" cols="30" style="resize:none" placeholder="Tell us what you want to know"></textarea>
+                <input type="submit" value="Submit" id="submit" formmethod="GET">
+           </div>
         </div>
     </form>
     <div id="footnote"> <!-- Sticky footer-->
