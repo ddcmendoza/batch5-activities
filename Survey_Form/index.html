@@ -12,91 +12,91 @@
     </div>
 
     
-    <h1 id = "title">Avion School Survey Form</h1>
-    <p id = "description">Thank you for taking the time to help us improve the platform</p>
-    <form id = "survey-form" action="" method="get">
-        <div class="container name">
-            <label for = "name" id="name-label">Name:</label>
-            <input type = "text" id = "name" placeholder="Last Name, First Name" name="name">
-        </div>
-        <div class="container e-mail" id="e-mail-label">
-            <label for = "e-mail">E-mail:</label>
-            <input type = "e-mail" id = "e-mail" placeholder="example@sample.com" pattern="[^ @]*@[^ @]*" name="e-mail">
-        </div>
-        <div class="container age">
-            <label for = "age" id="age-label">Age:</label>
-            <input type = "number" id = "age" placeholder="15-100 y.o." min="15" max="100" name="age">
-        </div>
-        <div class="container role">
-            <label for = "role" id="role-label">Which options currently describes your current role?</label>
-            <div id="dropdown">
-                <select name = "role" id = "dropdown">
-                    <option disabled selected value> Select Current Role </option>
-                    <option value = "student">Student</option>
-                    <option value = "programmer">Programmer</option>
-                    <option value = "designer">Designer</option>
-                    <option value = "freelancer">Freelancer</option>
-                    <option value = "other">Others</option>
-                </select>
+    <div class="wrapper">
+        <h1 id = "title">Avion School <br>Survey Form</h1>
+        <p id = "description">Thank you for taking the time to help us improve the platform.</p>
+        <form id = "survey-form" action="" method="get">
+            <div class="container name">
+                <label for = "name" id="name-label">Name:</label>
+                <input type = "text" id = "name" placeholder="Full Name" name="name">
             </div>
-        </div>
-        <div class="container reco">
-            <label for="reco" id="reco-label">Would you recommend Avion School to a friend?</label>
-            <div id="reco">
-                <input type="radio" name="reco" id="def" value="def">
-                <label for="def">Definitely</label>
+            <div class="container e-mail" id="e-mail-label">
+                <label for = "e-mail" id="email-label">E-mail:</label>
+                <input type = "e-mail" id = "e-mail" placeholder="example@sample.com" pattern="[^ @]*@[^ @]*" name="e-mail">
             </div>
-            <div id="reco">
-                <input type="radio" name="reco" id="maybe" value="maybe">
-                <label for="maybe">Maybe</label>
+            <div class="container age">
+                <label for = "age" id="age-label">Age:</label>
+                <input type = "number" id = "age" placeholder="15-100 y.o." min="15" max="100" name="age">
             </div>
-            <div id="reco">
-                <input type="radio" name="reco" id="notsure" value="notsure">
-                <label for="notsure">Not Sure</label>
+            <div class="container role">
+                <label for = "role" id="role-label">Which options currently describes your current role?</label>
+                <div id="dropdown">
+                    <select name = "role" id = "dropdown">
+                        <option disabled selected value> Select Current Role </option>
+                        <option value = "student">Student</option>
+                        <option value = "programmer">Programmer</option>
+                        <option value = "designer">Designer</option>
+                        <option value = "freelancer">Freelancer</option>
+                        <option value = "other">Others</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <div class="container favorite">
-            <label for = "favorite" id="favorite-label">What is your favorite feature of Avion School</label>
-            <div id="dropdown">
-                <select name = "favorite" id = "dropdown">
-                    <option disabled selected value> Select an option </option>
-                    <option value = "online">Online Learning</option>
-                    <option value = "activities">Activities</option>
-                    <option value = "instructor">Instructors</option>
-                    <option value = "classmate">Classmates</option>
-                    <option value = "ISA">Income Share Agreement</option>
-                </select>
+            <div class="container reco">
+                <label for="reco" id="reco-label">Would you recommend Avion School to a friend?</label>
+                <div id="reco">
+                    <input type="radio" name="reco" id="def" value="def">
+                    <label for="def">Definitely</label>
+                </div>
+                <div id="reco">
+                    <input type="radio" name="reco" id="maybe" value="maybe">
+                    <label for="maybe">Maybe</label>
+                </div>
+                <div id="reco">
+                    <input type="radio" name="reco" id="notsure" value="notsure">
+                    <label for="notsure">Not Sure</label>
+                </div>
             </div>
-        </div>
-        <div class = "container improve">
-            <label for ="improve" id="improve-label">What would you like to see improved? (Check all that apply.)</label>
-            <div id="imrpove">
-                <div id="improve-options"><input type="checkbox" id="option1" name="option1" value="frontend"><label for="option1"> Front-end Projects</label></div>
-                <div id="improve-options"><input type="checkbox" id="option2" name="option2" value="backend"><label for="option2"> Back-end Projects</label></div>
-                <div id="improve-options"><input type="checkbox" id="option3" name="option3" value="datavisualization"><label for="option3"> Data Visualization</label></div>
-                <div id="improve-options"><input type="checkbox" name="option4" id="option4" value="challenges"><label for="option4"> Challenges</label></div>
-                <div id="improve-options"><input type="checkbox" name="option5" id="option5" value="community"><label for="option5"> Open Source Community</label></div>
-                <div id="improve-options"><input type="checkbox" name="option6" id="option6" value="helprooms"><label for="option6"> Gitter help rooms</label></div>
-                <div id="improve-options"><input type="checkbox" name="option7" id="option7" value="videos"><label for="option7"> Videos</label></div>
-                <div id="improve-options"><input type="checkbox" name="option8" id="option8" value="meetups"><label for="option8"> City Meetups</label></div>
-                <div id="improve-options"><input type="checkbox" name="option9" id="option9" value="wiki"><label for="option9"> Wiki</label></div>
-                <div id="improve-options"><input type="checkbox" name="option10" id="option10" value="forum"><label for="option10"> Forum</label></div>
-                <div id="improve-options"><input type="checkbox" name="option11" id="option11" value="additional"><label for="option11"> Additional Courses</label></div>
+            <div class="container favorite">
+                <label for = "favorite" id="favorite-label">What is your favorite feature of Avion School</label>
+                <div id="dropdown">
+                    <select name = "favorite" id = "dropdown">
+                        <option disabled selected value> Select an option </option>
+                        <option value = "online">Online Learning</option>
+                        <option value = "activities">Activities</option>
+                        <option value = "instructor">Instructors</option>
+                        <option value = "classmate">Classmates</option>
+                        <option value = "ISA">Income Share Agreement</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <label for="comments" id="comments-label">Any comments or suggestions?</label>
-        <div>
-            <textarea name="comments" id="comments" style="resize:none" placeholder="" class="textinput"></textarea>
-        </div>
-        <input type="submit" id="submit">
-    </form>
+            <div class = "container improve">
+                <label for ="improve" id="improve-label">What would you like to see improved? (Check all that apply.)</label>
+                <div id="imrpove">
+                    <div id="improve-options"><input type="checkbox" id="option1" name="option1" value="frontend"><label for="option1"> Front-end Projects</label></div>
+                    <div id="improve-options"><input type="checkbox" id="option2" name="option2" value="backend"><label for="option2"> Back-end Projects</label></div>
+                    <div id="improve-options"><input type="checkbox" id="option3" name="option3" value="datavisualization"><label for="option3"> Data Visualization</label></div>
+                    <div id="improve-options"><input type="checkbox" name="option4" id="option4" value="challenges"><label for="option4"> Challenges</label></div>
+                    <div id="improve-options"><input type="checkbox" name="option5" id="option5" value="community"><label for="option5"> Open Source Community</label></div>
+                    <div id="improve-options"><input type="checkbox" name="option6" id="option6" value="helprooms"><label for="option6"> Gitter help rooms</label></div>
+                    <div id="improve-options"><input type="checkbox" name="option7" id="option7" value="videos"><label for="option7"> Videos</label></div>
+                    <div id="improve-options"><input type="checkbox" name="option8" id="option8" value="meetups"><label for="option8"> City Meetups</label></div>
+                    <div id="improve-options"><input type="checkbox" name="option9" id="option9" value="wiki"><label for="option9"> Wiki</label></div>
+                    <div id="improve-options"><input type="checkbox" name="option10" id="option10" value="forum"><label for="option10"> Forum</label></div>
+                    <div id="improve-options"><input type="checkbox" name="option11" id="option11" value="additional"><label for="option11"> Additional Courses</label></div>
+                </div>
+            </div>
+            <label for="comments" id="comments-label">Any comments or suggestions?</label>
+            <div>
+                <textarea name="comments" id="comments" placeholder="" class="textinput"></textarea>
+            </div>
+            <div id="submit"><input type="submit" id="submit"></div>
+        </form>
 
+    </div>
 
 
     <div id="footnote"> <!-- Sticky footer-->
-        <p>
-            Created by: Dave Mendoza &copy; 2020
-        </p>
+        <p>Created by: Dave Mendoza &copy; 2020</p>
     </div>
 </body>
 

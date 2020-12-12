@@ -5,12 +5,71 @@
 
 *{
     font-family: JetBrains;
+    text-shadow: .5px .5px .1px black ;
+    font-weight: 500;
+    color:snow;
 }
 
 div#navbar{
     position: fixed;
     top:0;
     left:0;
+    width: 100%;
+    background-color: white;
+    opacity: 45%;
+    z-index: 100;
+    padding: .25em;
+}
+select,option, input{
+    color:black;
+    text-shadow: 0 0 0;
+}
+a{
+    color:black;
+    text-decoration: none;
+}
+a:hover{
+    color:white;
+    background:black;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-image:linear-gradient(black, black), url(bg.jpg);
+    background-attachment: fixed;
+    background-size: cover;
+    background-blend-mode: saturation;
+}
+p{
+    text-align:center;
+}
+
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    background-color:dimgray;
+    opacity: 90%;
+    padding: 2em;
+    border-radius: 2em;
+    box-shadow: 3px 3px 1.5px black;
+}
+div .container{
+    margin:.75em;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 2px 1px white,-2px -2px 1px #000000;
+}
+label[id*="label"]{
+    width: 100%;
+    opacity: 100%;
+    
+}
+h1{
+    text-align: center;
+    margin:0;
+    padding:0;
 }
 
 #footnote {
@@ -19,6 +78,12 @@ div#navbar{
     bottom: 0;
     width: 100%;
     text-align: center;
+    background-color: dimgray;
+    opacity: 50;
+}
+#footnote>p{
+    margin:0;
+    padding: 0;
 }
 .textinput {
     float: left;
@@ -26,5 +91,17 @@ div#navbar{
     min-height: 75px;
     outline: none;
     resize: none;
-    border: 1px solid grey;
+    background-color:darkgray;
+    box-shadow: 2px 2px 1px white,-2px -2px 1px #000000;
+
+}
+#submit{
+    text-align: center;
+    margin-top: 1em
+}
+
+@media screen and (min-width:1080px){
+    .wrapper{
+        width: 40%;
+    }
 }
