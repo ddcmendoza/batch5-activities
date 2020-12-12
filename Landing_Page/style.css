@@ -122,6 +122,10 @@ div.list-item{
 dd{
     margin:0;
 }
+div.list-item:hover{
+    box-shadow: 5px 5px 2.5px gray,-5px -5px 2.5px beige;
+    z-index: 50;
+}
 @media screen and (max-width:640px){
     iframe{
         width:100%;
