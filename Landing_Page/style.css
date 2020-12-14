@@ -200,6 +200,10 @@ input#name, input#email{
     textarea{
         width:50%;
     }
+    .row{
+        flex-direction: column;
+        align-items: center;
+    }
 
 }
 #footnote {
