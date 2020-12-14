@@ -1,0 +1,66 @@
+div#navbar{
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    background-color: white;
+}
+
+body{
+    margin: 2.5em;
+    background-color:aliceblue;
+}
+
+div.calculator{
+    display:grid;
+    grid-template:
+    'screen screen screen screen'
+    'screen2 screen2 screen2 screen2'
+    'plus minus multiply divide'
+    'n1 n2 n3 equals'
+    'n4 n5 n6 equals'
+    'n7 n8 n9 equals'
+    'n0 point clear equals';
+    grid-gap: .5em;
+    grid-template-rows: 2em;
+    font-size: 1.5em;
+}
+
+button.number, button.operation{
+    height: 3em;
+    font-size: 1.2em;
+}
+.screen{
+    grid-area: screen;
+    text-align: right;
+    font-size: 2em;
+}
+.screen2{
+    grid-area: screen2;
+    text-align: right;
+    font-size: 2em;
+    color:red;
+}
+.n1 {grid-area: n1;}
+.n2 {grid-area: n2;}
+.n3 {grid-area: n3;}
+.n4 {grid-area: n4;}
+.n5 {grid-area: n5;}
+.n6 {grid-area: n6;}
+.n7 {grid-area: n7;}
+.n8 {grid-area: n8;}
+.n9 {grid-area: n9;}
+.n0 {grid-area: n0;}
+
+.plus{grid-area: plus;}
+.minus{grid-area: minus;}
+.multiply{grid-area: multiply;}
+.divide{grid-area: divide;}
+.equals{
+    grid-area: equals;
+    font-size: 3em;
+}
+
+.point{grid-area:point;}
+.clear{grid-area:clear;}
+
