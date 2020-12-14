@@ -18,7 +18,8 @@ div#navbar{
 }
 
 body{
-    margin: 2.5em;
+    margin: .5vw;
+    margin-top: 2em;
     background-color:aliceblue;
 }
 
@@ -32,14 +33,18 @@ div.calculator{
     'n4 n5 n6 equals'
     'n7 n8 n9 equals'
     'n0 point clear equals';
-    grid-gap: .5em;
-    grid-template-rows: 2em;
-    font-size: 1.5em;
+    grid-gap: 1vw;
+    justify-items: center;
 }
 
 button.number, button.operation{
-    height: 3em;
-    font-size: 1.2em;
+    height: 10vh;
+}
+input{
+    width: 90%;
+}
+button{
+    width: 20vw;
 }
 .screen{
     grid-area: screen;

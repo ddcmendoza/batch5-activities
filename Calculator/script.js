@@ -17,7 +17,8 @@ function operation(text){
     let num = parseFloat(screen.value);
     screen.value=null;
     op = text;
-    if (result === null && resultscreen.value == null){
+    if (result === null && resultscreen.value == ""){
+        
         num1 = num;
         resultscreen.value= resultscreen.value + num1 + op;
         toggle = true;
@@ -64,7 +65,7 @@ function compute(){
     toggle = false;
     }
     else{
-        num1 = result;
+        if (result != null){ num1 = result;}
         num2 = num2;
         op = op;
         toggle = true;
