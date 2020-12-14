@@ -2,6 +2,7 @@ var num1;
 var num2;
 var op;
 var toggle = true;
+var result;
 const screen = document.getElementById("screen");
 const resultscreen = document.getElementById("result");
 
@@ -14,9 +15,9 @@ function input(text){
 
 function operation(text){
     num1 = parseFloat(screen.value);
+    resultscreen.value = null;
     screen.value=null;
     op = text;
-    console.log(num1);
     resultscreen.value= resultscreen.value + num1 + text;
     toggle = true;
 }
@@ -24,14 +25,15 @@ function operation(text){
 function clearScreen(){
     screen.value=null;
     resultscreen.value=null;
+    result = null;
 }
 
 function compute(){
+    
     if(toggle){
     num2 = parseFloat(screen.value);
     resultscreen.value = resultscreen.value + num2;
-    console.log(num2);
-    var result;
+    
     switch(op){
         case "+":
             result = num1 + num2;
@@ -48,15 +50,17 @@ function compute(){
         default:
             clearScreen();
     }
-
-    console.log(result);
     resultscreen.value = result;
-    num1 = null;
-    num2 = null;
     toggle = false;
     }
     else{
-        clearScreen();
+        console.log(num1);
+        console.log(num2);
+        console.log(result);
+        num1 = result;
+        num2 = num2;
+        op = op;
         toggle = true;
+        compute();
     }
 }
