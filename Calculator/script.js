@@ -20,7 +20,7 @@ function operation(text){
     if (result === null && resultscreen.value == ""){
         
         num1 = num;
-        resultscreen.value= resultscreen.value + num1 + op;
+        resultscreen.value= resultscreen.value + num1;
         toggle = true;
     }
     else{
