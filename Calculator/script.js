@@ -1,8 +1,8 @@
 var num1;
-var num2;
+var num2 = null;
 var op;
 var toggle = true;
-var result;
+var result = null;
 const screen = document.getElementById("screen");
 const resultscreen = document.getElementById("result");
 
@@ -14,26 +14,36 @@ function input(text){
 }
 
 function operation(text){
-    num1 = parseFloat(screen.value);
-    resultscreen.value = null;
+    let num = parseFloat(screen.value);
     screen.value=null;
     op = text;
-    resultscreen.value= resultscreen.value + num1 + text;
-    toggle = true;
+    if (result === null && resultscreen.value == null){
+        num1 = num;
+        resultscreen.value= resultscreen.value + num1 + op;
+        toggle = true;
+    }
+    else{
+        num2 = null;
+        if(!isNaN(num)){ 
+            num2 = num;
+            toggle = false;
+            compute();
+        }
+    }
+    
 }
 
 function clearScreen(){
     screen.value=null;
     resultscreen.value=null;
     result = null;
+    num2 = null;
 }
 
 function compute(){
-    
     if(toggle){
-    num2 = parseFloat(screen.value);
-    resultscreen.value = resultscreen.value + num2;
-    
+    if(num2 === null){ num2 = parseFloat(screen.value);}
+    screen.value = null;
     switch(op){
         case "+":
             result = num1 + num2;
@@ -54,9 +64,6 @@ function compute(){
     toggle = false;
     }
     else{
-        console.log(num1);
-        console.log(num2);
-        console.log(result);
         num1 = result;
         num2 = num2;
         op = op;

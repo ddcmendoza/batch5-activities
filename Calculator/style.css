@@ -1,3 +1,14 @@
+@font-face{
+    font-family: JetBrains;
+    src: url('JetBrainsMono.ttf');
+}
+
+*{
+    font-family: JetBrains;
+    text-shadow: .5px .5px .1px white ;
+    font-weight: 500;
+    color:black;
+}
 div#navbar{
     position: fixed;
     top:0;
@@ -64,3 +75,13 @@ button.number, button.operation{
 .point{grid-area:point;}
 .clear{grid-area:clear;}
 
+div#footnote{
+    position: fixed;
+    bottom:1vh;
+    text-align: center;
+    width:100%;
+
+    font-size: 1.5vh;
+
+
+}
