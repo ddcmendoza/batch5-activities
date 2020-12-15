@@ -10,6 +10,7 @@
     text-shadow: .5px .25px 1px dimgray ;
     font-weight: 500;
     background-color:#fefefe;
+    border-radius: 1em;
 }
 
 
@@ -126,6 +127,7 @@ a.nav-link:hover{
 }
 textarea{
     text-align:left;
+    padding:1em;
 }
 div.list-item{
     pad: .5em;
@@ -148,6 +150,7 @@ input#submit{
 }
 input#name, input#email{
     margin:.25em;
+    padding: .5em;
 }
 
 @keyframes appear{

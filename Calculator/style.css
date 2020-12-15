@@ -8,7 +8,7 @@
     text-shadow: .5px .5px .1px white ;
     font-weight: 500;
     color:black;
-    
+
 }
 div#navbar{
     position: fixed;
@@ -22,7 +22,6 @@ body{
     margin: .5vw;
     margin-top: 2em;
     background-color:aliceblue;
-    
 }
 
 div.calculator{
@@ -42,7 +41,6 @@ div.calculator{
 
 button.number, button.operation{
     height: 10vh;
-    
 }
 
 input{
