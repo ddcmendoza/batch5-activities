@@ -30,7 +30,7 @@ div.calculator{
     'screen2 screen2 screen2 screen2'
     'screen3 screen screen screen'
     'plus minus multiply divide'
-    'n1 n2 n3 equals'
+    'n1 n2 n3 modulo'
     'n4 n5 n6 equals'
     'n7 n8 n9 equals'
     'n0 point clear equals';
@@ -96,6 +96,7 @@ button:hover{
 
 .plus{grid-area: plus;}
 .minus{grid-area: minus;}
+.modulo{grid-area: modulo;}
 .multiply{grid-area: multiply;}
 .divide{grid-area: divide;}
 .equals{
