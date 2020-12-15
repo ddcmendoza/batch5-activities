@@ -8,6 +8,7 @@
     text-shadow: .5px .5px .1px white ;
     font-weight: 500;
     color:black;
+    
 }
 div#navbar{
     position: fixed;
@@ -21,13 +22,14 @@ body{
     margin: .5vw;
     margin-top: 2em;
     background-color:aliceblue;
+    
 }
 
 div.calculator{
     display:grid;
     grid-template:
     'screen screen screen screen'
-    'screen2 screen2 screen2 screen2'
+    'screen3 screen2 screen2 screen2'
     'plus minus multiply divide'
     'n1 n2 n3 equals'
     'n4 n5 n6 equals'
@@ -35,16 +37,35 @@ div.calculator{
     'n0 point clear equals';
     grid-gap: 1vw;
     justify-items: center;
+    align-items: left;
 }
 
 button.number, button.operation{
     height: 10vh;
+    
 }
+
 input{
     width: 90%;
+    border-radius: 1vw;
+    box-shadow: .5vw .5vw .25vw darkgray;
+    padding-right: .5em;
+
+}
+input#operation{
+    width: 12.5vw;
+    background-color:darkgray;
 }
 button{
     width: 20vw;
+    font-size: 1.5em;
+    border-radius: 5vw;
+    box-shadow: .75vw .75vw .375vw darkgray;
+}
+button:hover{
+    background-color:black;
+    color:white;
+    box-shadow: 1vw 1vw .5vw dimgray;
 }
 .screen{
     grid-area: screen;
@@ -55,7 +76,14 @@ button{
     grid-area: screen2;
     text-align: right;
     font-size: 2em;
-    color:red;
+    color:GREEN;
+}
+.screen3{
+    grid-area: screen3;
+    text-align: center;
+    font-size: 2em;
+    color:WHITE;
+
 }
 .n1 {grid-area: n1;}
 .n2 {grid-area: n2;}

@@ -1,74 +1,62 @@
-var num1;
-var num2 = null;
-var op;
-var toggle = true;
+var num = null;
+var op = null;
+const OPERATIONS = ['+','-','/','*','='];
+
 var result = null;
-const screen = document.getElementById("screen");
-const resultscreen = document.getElementById("result");
+const SCREEN = document.getElementById("screen");
+const RESULTSCREEN = document.getElementById("result");
+const OPSCREEN = document.getElementById("operation");
 
 function input(text){
-    if (text=="." && screen.value.indexOf(".") != -1 ){
+    //Will not allow first character to be an operator
+    if(SCREEN.value.length == 0 && OPERATIONS.includes(text)){
         text="";
-     }
-    screen.value = screen.value + text;
-}
+        return;
+    }
 
-function operation(text){
-    let num = parseFloat(screen.value);
-    screen.value=null;
-    op = text;
-    if (result === null && resultscreen.value == ""){
-        
-        num1 = num;
-        resultscreen.value= resultscreen.value + num1;
-        toggle = true;
-    }
-    else{
-        num2 = null;
-        if(!isNaN(num)){ 
-            num2 = num;
-            toggle = false;
-            compute();
+    //Will not allow to have multiple decimal points
+    if (text=="." && SCREEN.value.indexOf(".") != -1 ){
+        text="";
+        return;
+     }
+
+     //Will not allow succeeding operators to be inputted
+     if(OPERATIONS.includes(SCREEN.value.charAt(SCREEN.value.length-1))&& OPERATIONS.includes(text)){
+         text="";
+         return;
+     }
+
+     //if operator is chosen assign the operator to op variable
+     if(OPERATIONS.includes(text)){
+        op = text;
+        OPSCREEN.value = op;
+        if (result == null){
+            result = parseFloat(SCREEN.value);
+            RESULTSCREEN.value = result;
+            SCREEN.value = '';
         }
-    }
-    
+        else{
+        evaluateEQ();
+        }
+        return;
+     }
+
+    SCREEN.value = SCREEN.value + text;
 }
 
 function clearScreen(){
-    screen.value=null;
-    resultscreen.value=null;
+    SCREEN.value= '';
+    RESULTSCREEN.value= '';
     result = null;
-    num2 = null;
+    op = null;
+
 }
 
-function compute(){
-    if(toggle){
-    if(num2 === null){ num2 = parseFloat(screen.value);}
-    screen.value = null;
-    switch(op){
-        case "+":
-            result = num1 + num2;
-            break;
-        case "-":
-            result = num1 - num2;
-            break;
-        case "/":
-            result = num1/num2;
-            break;
-        case "*":
-            result = num1*num2;
-            break;
-        default:
-            clearScreen();
+function evaluateEQ(){
+    if (SCREEN.value != ''){
+        num = parseFloat(SCREEN.value);
     }
-    resultscreen.value = result;
-    toggle = false;
-    }
-    else{
-        if (result != null){ num1 = result;}
-        num2 = num2;
-        op = op;
-        toggle = true;
-        compute();
-    }
+    result = eval(result+op+num);
+    SCREEN.value = '';
+    RESULTSCREEN.value = result;
 }

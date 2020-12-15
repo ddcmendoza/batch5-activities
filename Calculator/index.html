@@ -13,7 +13,9 @@
     <div class = "calculator">
 
         <input type="text" class="screen" id="screen" disabled>
+        <input type="text" class="screen3" id="operation" disabled>
         <input type="text" class="screen2" id="result" disabled>
+        
         <button type="button" class="number n1" onclick="input(1)">1</button>
         <button type="button" class="number n2" onclick="input(2)">2</button>
         <button type="button" class="number n3" onclick="input(3)">3</button>
@@ -25,11 +27,11 @@
         <button type="button" class="number n9" onclick="input(9)">9</button>
         <button type="button" class="number n0" onclick="input(0)">0</button>
 
-        <button type="button" class="operation plus" onclick="operation('+')">+</button>
-        <button type="button" class="operation divide" onclick="operation('/')">/</button>
-        <button type="button" class="operation multiply" onclick="operation('*')">x</button>
-        <button type="button" class="operation minus" onclick="operation('-')">-</button>
-        <button type="button" class="equals" onclick="compute()">=</button>
+        <button type="button" class="operation plus" onclick="input('+')">+</button>
+        <button type="button" class="operation divide" onclick="input('/')">÷</button>
+        <button type="button" class="operation multiply" onclick="input('*')">x</button>
+        <button type="button" class="operation minus" onclick="input('-')">-</button>
+        <button type="button" class="equals" onclick="evaluateEQ()">=</button>
 
         <button type="button" class="other point" onclick="input('.')">.</button>
         <button type="button" class="other clear" onclick="clearScreen()">AC</button>
