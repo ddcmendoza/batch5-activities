@@ -1,3 +1,5 @@
+
+
 var num = null;
 var op = null;
 const OPERATIONS = ['+','-','/','*','='];
@@ -28,15 +30,18 @@ function input(text){
 
      //if operator is chosen assign the operator to op variable
      if(OPERATIONS.includes(text)){
-        op = text;
-        OPSCREEN.value = op;
+        
         if (result == null){
+            op = text;
+            OPSCREEN.value = op;
             result = parseFloat(SCREEN.value);
             RESULTSCREEN.value = result;
             SCREEN.value = '';
         }
         else{
         evaluateEQ();
+        op = text;
+        OPSCREEN.value = op;
         }
         return;
      }
@@ -45,8 +50,9 @@ function input(text){
 }
 
 function clearScreen(){
-    SCREEN.value= '';
-    RESULTSCREEN.value= '';
+    SCREEN.value = '';
+    RESULTSCREEN.value = '';
+    OPSCREEN.value = '';
     result = null;
     op = null;
 

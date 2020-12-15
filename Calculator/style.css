@@ -27,8 +27,8 @@ body{
 div.calculator{
     display:grid;
     grid-template:
-    'screen screen screen screen'
-    'screen3 screen2 screen2 screen2'
+    'screen2 screen2 screen2 screen2'
+    'screen3 screen screen screen'
     'plus minus multiply divide'
     'n1 n2 n3 equals'
     'n4 n5 n6 equals'
