@@ -10,10 +10,11 @@
     text-shadow: .5px .25px 1px dimgray ;
     font-weight: 500;
     background-color:#fefefe;
-    border-radius: 1em;
+    border-radius: .5em;
 }
-
-
+p{
+    padding:1em;
+}
 /* .col-1 {width: 8.33%;}
 .col-2 {width: 16.67;}
 .col-3 {width: 25%;}
@@ -115,6 +116,8 @@ a.logo{
     width:15%;
     animation: appear 1.5s forwards;
     animation-play-state: paused;
+    padding:1em;
+    border-radius: 0;
 
 }
 a.nav-link:link{
@@ -128,6 +131,7 @@ a.nav-link:hover{
 textarea{
     text-align:left;
     padding:1em;
+    margin:1em;
 }
 div.list-item{
     pad: .5em;
@@ -186,7 +190,7 @@ input#name, input#email{
         animation: grow 1.5s forwards;
     }
     textarea{
-        width:100%;
+        width:90%;
     }
 
 }
