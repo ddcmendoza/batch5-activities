@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="./style.css"/>
+	<script src="./scripts.js"></script>
+    <title>Chessboard</title>
+</head>
+<body>
+    <div id = "navbar">
+		<a href="../index.html" >Home</a>
+	</div>
+	<div id = "functions">
+		<div onclick="putChessPieces()">
+			Put pieces
+		</div>
+		<div onclick="removePieces()">
+			Remove pieces
+		</div>
+		<!-- <div onclick="printStatus()">
+			Debug
+		</div> -->
+
+	</div>
+ 
+	<div>
+	</div><div class = "board">
+        <div class="box r1 c1" onclick="movePieces(1,1)"></div>
+		<div class="box r1 c2" onclick="movePieces(1,2)"></div>
+		<div class="box r1 c3" onclick="movePieces(1,3)"></div>
+		<div class="box r1 c4" onclick="movePieces(1,4)"></div>
+		<div class="box r1 c5" onclick="movePieces(1,5)"></div>
+		<div class="box r1 c6" onclick="movePieces(1,6)"></div>
+		<div class="box r1 c7" onclick="movePieces(1,7)"></div>
+		<div class="box r1 c8" onclick="movePieces(1,8)"></div>
+		<div class="box r2 c1" onclick="movePieces(2,1)"></div>
+		<div class="box r2 c2" onclick="movePieces(2,2)"></div>
+		<div class="box r2 c3" onclick="movePieces(2,3)"></div>
+		<div class="box r2 c4" onclick="movePieces(2,4)"></div>
+		<div class="box r2 c5" onclick="movePieces(2,5)"></div>
+		<div class="box r2 c6" onclick="movePieces(2,6)"></div>
+		<div class="box r2 c7" onclick="movePieces(2,7)"></div>
+		<div class="box r2 c8" onclick="movePieces(2,8)"></div>
+		<div class="box r3 c1" onclick="movePieces(3,1)"></div>
+		<div class="box r3 c2" onclick="movePieces(3,2)"></div>
+		<div class="box r3 c3" onclick="movePieces(3,3)"></div>
+		<div class="box r3 c4" onclick="movePieces(3,4)"></div>
+		<div class="box r3 c5" onclick="movePieces(3,5)"></div>
+		<div class="box r3 c6" onclick="movePieces(3,6)"></div>
+		<div class="box r3 c7" onclick="movePieces(3,7)"></div>
+		<div class="box r3 c8" onclick="movePieces(3,8)"></div>
+		<div class="box r4 c1" onclick="movePieces(4,1)"></div>
+		<div class="box r4 c2" onclick="movePieces(4,2)"></div>
+		<div class="box r4 c3" onclick="movePieces(4,3)"></div>
+		<div class="box r4 c4" onclick="movePieces(4,4)"></div>
+		<div class="box r4 c5" onclick="movePieces(4,5)"></div>
+		<div class="box r4 c6" onclick="movePieces(4,6)"></div>
+		<div class="box r4 c7" onclick="movePieces(4,7)"></div>
+		<div class="box r4 c8" onclick="movePieces(4,8)"></div>
+		<div class="box r5 c1" onclick="movePieces(5,1)"></div>
+		<div class="box r5 c2" onclick="movePieces(5,2)"></div>
+		<div class="box r5 c3" onclick="movePieces(5,3)"></div>
+		<div class="box r5 c4" onclick="movePieces(5,4)"></div>
+		<div class="box r5 c5" onclick="movePieces(5,5)"></div>
+		<div class="box r5 c6" onclick="movePieces(5,6)"></div>
+		<div class="box r5 c7" onclick="movePieces(5,7)"></div>
+		<div class="box r5 c8" onclick="movePieces(5,8)"></div>
+		<div class="box r6 c1" onclick="movePieces(6,1)"></div>
+		<div class="box r6 c2" onclick="movePieces(6,2)"></div>
+		<div class="box r6 c3" onclick="movePieces(6,3)"></div>
+		<div class="box r6 c4" onclick="movePieces(6,4)"></div>
+		<div class="box r6 c5" onclick="movePieces(6,5)"></div>
+		<div class="box r6 c6" onclick="movePieces(6,6)"></div>
+		<div class="box r6 c7" onclick="movePieces(6,7)"></div>
+		<div class="box r6 c8" onclick="movePieces(6,8)"></div>
+		<div class="box r7 c1" onclick="movePieces(7,1)"></div>
+		<div class="box r7 c2" onclick="movePieces(7,2)"></div>
+		<div class="box r7 c3" onclick="movePieces(7,3)"></div>
+		<div class="box r7 c4" onclick="movePieces(7,4)"></div>
+		<div class="box r7 c5" onclick="movePieces(7,5)"></div>
+		<div class="box r7 c6" onclick="movePieces(7,6)"></div>
+		<div class="box r7 c7" onclick="movePieces(7,7)"></div>
+		<div class="box r7 c8" onclick="movePieces(7,8)"></div>
+		<div class="box r8 c1" onclick="movePieces(8,1)"></div>
+		<div class="box r8 c2" onclick="movePieces(8,2)"></div>
+		<div class="box r8 c3" onclick="movePieces(8,3)"></div>
+		<div class="box r8 c4" onclick="movePieces(8,4)"></div>
+		<div class="box r8 c5" onclick="movePieces(8,5)"></div>
+		<div class="box r8 c6" onclick="movePieces(8,6)"></div>
+		<div class="box r8 c7" onclick="movePieces(8,7)"></div>
+		<div class="box r8 c8" onclick="movePieces(8,8)"></div>
+	</div>
+	<p class="description"></p>
+	<div id = "footnote">
+		Created by: Dave Mendoza &copy; 2020
+	</div>
+</body>
+</html>
+
