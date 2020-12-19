@@ -7,6 +7,7 @@ General TODO:
 5. En passant/Castling
 6. Timers [x]
 7. Pawn promotion
+8. *OPTIONAL* - add logging
 
 */
 
