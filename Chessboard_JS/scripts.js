@@ -115,7 +115,7 @@ function movePieces(r,c){
     }
     if(clickingPiece){
         //check if move is possible
-        if(checkMove(r,c,holdingR,holdingC,holdingPiece,holdingPieceColor,piece)){
+        if(checkMove(r,c,holdingR,holdingC,holdingPiece,holdingPieceColor,piece) && piece[0].style.color != containerPiece.style.color){
             console.log("move valid");
             containerPiece.innerHTML = "";
             containerPiece.style.color = "";
@@ -138,7 +138,7 @@ function movePieces(r,c){
         
         else{
             //TO DO Display invalid move
-            console.log("Invalid Move")
+            console.log("invalid move")
         }
         //reset value
         clickingPiece = false;
@@ -147,6 +147,7 @@ function movePieces(r,c){
         containerPiece = null
         holdingR = null;
         holdingC = null;
+        console.log("drop piece")
     }
 
     else if(!clickingPiece){
@@ -173,12 +174,8 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
     let multiplier = 1;
     if(color == 'black') { multiplier = -1;}
     const curPiece = piece[0].innerHTML;
-    const curColor = piece[0].style.color;
     const rdiff = Math.abs(prevR-curR);
     const cdiff = Math.abs(prevC-curC);
-    
-    //if moving to empty space
-    if (color == curColor) {return false;}
     switch(holdPiece){
         case PAWN:
             // lol definitely will change later, but good for now 12/20/2020
@@ -190,6 +187,9 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
             if(curPiece != ''){
                 if(curR == prevR - 1*multiplier && (curC == prevC + 1 || curC == prevC-1)){
                     return true;
+                }
+                else{
+                    return false;
                 }
             }
             // if going to empty space
