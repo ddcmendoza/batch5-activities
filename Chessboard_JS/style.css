@@ -88,7 +88,7 @@ div#functions div:hover{
     div#functions{
         position: fixed;
         top:85vh;
-        left:30vw;
+        left:40vw;
         color: white;
         font-size: 3vh;
     }
@@ -116,6 +116,6 @@ div#footnote{
     background: none;
     font-size:1.5vh;
 }
-.description{
+.description, [class*="timer"]{
     text-align: center;
 }
