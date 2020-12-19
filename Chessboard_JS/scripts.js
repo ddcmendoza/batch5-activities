@@ -72,7 +72,7 @@ function putChessPieces() {
             BOX[i].innerHTML = KING;
             BOX[i].style.color = 'white';
         }
-        if(i<17){
+        if(i<16){
             BOX[i].style.color = 'black';
         }
      }
@@ -103,16 +103,16 @@ function removePieces(){
 /*TO DO:
     1. DO logic for clicking if clickingPiece = true [done]
     2. DO logic for dropping if clickingPiece = false [done]
-    3. if clickingPiece = true, the only way to set it to false is to click a valid 'box' which will be checked by checkMove()
+    3. if clickingPiece = true, the only way to set it to false is to click a valid 'box' which will be checked by checkMove() [done]
     4. if clickingPiece = false, the only way to set it to false is to click a valid 'piece' that can move which will be checked by checkPiece()
 */
 function movePieces(r,c){
-    console.log(whiteMove);
     let piece = document.getElementsByClassName("box r"+ r +" c" + c );
     let colorToMove = 'white';
     if(!whiteMove){
         colorToMove = 'black';
     }
+    piece[0].style.animation = '';
     if(clickingPiece){
         //check if move is possible
         if(checkMove(r,c,holdingR,holdingC,holdingPiece,holdingPieceColor,piece) && piece[0].style.color != containerPiece.style.color){
@@ -121,7 +121,6 @@ function movePieces(r,c){
             containerPiece.style.color = "";
             piece[0].innerHTML = holdingPiece;
             piece[0].style.color = holdingPieceColor;
-            
             if(whiteMove){
                 blackInt = setInterval(timerBlack, 1000);
                 clearInterval(whiteInt);
@@ -135,12 +134,12 @@ function movePieces(r,c){
                 DESC[0].innerHTML = "White Move";
             }
         }
-        
         else{
             //TO DO Display invalid move
             console.log("invalid move")
         }
         //reset value
+        containerPiece.style.animation = '';
         clickingPiece = false;
         holdingPiece = null;
         holdingPieceColor = null;
@@ -151,10 +150,10 @@ function movePieces(r,c){
     }
 
     else if(!clickingPiece){
-        console.log("pick up a piece");
-
         //checks if there's a piece and if the piece can move
         if(piece[0].innerHTML != '' && colorToMove == piece[0].style.color && checkPiece(piece,r,c)){
+            console.log("pick up a piece");
+            piece[0].style.animation = "highlight 1.5s infinite";
             holdingPiece = piece[0].innerHTML;
             holdingPieceColor = piece[0].style.color;
             containerPiece = piece[0];
@@ -163,6 +162,7 @@ function movePieces(r,c){
             holdingC = c;
             //displayMove(r,c,holdingPiece); for future
         }
+        
     }
 }
 
@@ -204,24 +204,27 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
                     return true;
                 }
             }
+            break;
         case ROOK:
             if(curC == prevC || curR == prevR){
                 return true;
             }
+            break;
         case KNIGHT:
-            if(((curR != prevR)&&(curC != prevC)) &&((rdiff)+(cdiff) == 3))
-            {
+            if(((curR != prevR) && (curC != prevC)) &&(rdiff+cdiff == 3)){
                 return true;
             }
-
+            break;
         case BISHOP:
             if ((rdiff/cdiff) == 1){
                 return true;
             }
+            break;
         case KING:
             if(rdiff <= 1 && cdiff <= 1){
                 return true;
             }
+            break;
         case QUEEN:
             if(curC == prevC || curR == prevR){
                 return true;
@@ -229,6 +232,7 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
             if ((rdiff/cdiff) == 1){
                 return true;
             }
+            break;
     }
     return false;
 }

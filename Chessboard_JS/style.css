@@ -23,11 +23,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    -webkit-user-select:none;
-    -khtml-user-select:none;
-    -moz-user-select:none;
-    -ms-user-select:none;
-    -o-user-select:none;
     user-select:none;
 }
 
@@ -122,4 +117,9 @@ div#footnote{
 
 .valid{
     opacity: 70%;
+}
+@keyframes highlight{
+    0%{font-size:calc(10vh);}
+    50%{font-size:calc(12.5vh);}
+    100%{font-size:calc(10vh);}
 }
