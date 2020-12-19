@@ -119,3 +119,7 @@ div#footnote{
 .description, [class*="timer"]{
     text-align: center;
 }
+
+.valid{
+    opacity: 70%;
+}
