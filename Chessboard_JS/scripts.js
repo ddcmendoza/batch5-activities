@@ -1,7 +1,7 @@
 /*
 General TODO:
 1. Alternating moves [x]
-2. Move and Move Checking (In Progress)
+2. Move and Move Checking (Move Done? Checking-collision checking(or blockage))
 3. Piece Checking (Started)
 4. Victory Condition - Checkmate and Timer running out
 5. En passant/Castling
@@ -26,6 +26,8 @@ var holdingPieceColor = null;
 var containerPiece = null;
 var holdingR = null;
 var holdingC = null;
+var whiteKing;
+var blackKing;
 
 //timers and move determination
 var whiteInt;
@@ -73,8 +75,9 @@ function putChessPieces() {
         if(i<17){
             BOX[i].style.color = 'black';
         }
-
      }
+     whiteKing = BOX[60];
+     blackKing = BOX[4];
 }
 
 //function for clearing the board
@@ -115,6 +118,7 @@ function movePieces(r,c){
         if(checkMove(r,c,holdingR,holdingC,holdingPiece,holdingPieceColor,piece)){
             console.log("move valid");
             containerPiece.innerHTML = "";
+            containerPiece.style.color = "";
             piece[0].innerHTML = holdingPiece;
             piece[0].style.color = holdingPieceColor;
             
@@ -134,6 +138,7 @@ function movePieces(r,c){
         
         else{
             //TO DO Display invalid move
+            console.log("Invalid Move")
         }
         //reset value
         clickingPiece = false;
@@ -166,22 +171,17 @@ function movePieces(r,c){
 //will need to refactor later
 function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
     let multiplier = 1;
+    if(color == 'black') { multiplier = -1;}
     const curPiece = piece[0].innerHTML;
     const curColor = piece[0].style.color;
-    if(color == 'black') { multiplier = -1;}
+    const rdiff = Math.abs(prevR-curR);
+    const cdiff = Math.abs(prevC-curC);
+    
     //if moving to empty space
     if (color == curColor) {return false;}
     switch(holdPiece){
         case PAWN:
-            // if going to empty space
-            if(curPiece == ''){
-                if((curR+(multiplier*2))*multiplier < (prevR)*multiplier){
-                    return false;
-                }
-                if(curC != prevC){
-                    return false;
-                }
-            }
+            // lol definitely will change later, but good for now 12/20/2020
             // when not in the starting square
             if((curR+(multiplier*1))*multiplier < (prevR)*multiplier && !(prevR ==7 || prevR ==2)){
                 return false;
@@ -191,19 +191,46 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
                 if(curR == prevR - 1*multiplier && (curC == prevC + 1 || curC == prevC-1)){
                     return true;
                 }
-                else{
+            }
+            // if going to empty space
+            if(curPiece == ''){
+                if((curR+(multiplier*2))*multiplier < (prevR)*multiplier){
                     return false;
+                }
+                if(curC != prevC){
+                    return false;
+                }
+                else{
+                    return true;
                 }
             }
         case ROOK:
+            if(curC == prevC || curR == prevR){
+                return true;
+            }
         case KNIGHT:
+            if(((curR != prevR)&&(curC != prevC)) &&((rdiff)+(cdiff) == 3))
+            {
+                return true;
+            }
+
         case BISHOP:
+            if ((rdiff/cdiff) == 1){
+                return true;
+            }
         case KING:
+            if(rdiff <= 1 && cdiff <= 1){
+                return true;
+            }
         case QUEEN:
-
-
+            if(curC == prevC || curR == prevR){
+                return true;
+            }
+            if ((rdiff/cdiff) == 1){
+                return true;
+            }
     }
-    return true;
+    return false;
 }
 //TO DO: will highlight valid moves, then put valid class to the valid elements
 function displayMove(r,c,piece){
@@ -238,4 +265,13 @@ function displayTime(time){
     return (Math.floor(time/60)) + ":" + ("0"+(time%60)).slice(-2);
 }
 
+//will return the row of the box
+function getR(box){
+    return box.className[5];
+}
+
+//will return the column of the box
+function getC(box){
+    return box.className[8];
+}
 putChessPieces(); //for testing only
