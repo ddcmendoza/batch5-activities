@@ -172,8 +172,7 @@ function movePieces(r,c){
 //cur = destination, prev = source
 //will need to refactor later
 function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
-    let multiplier = 1;
-    if(color == 'black') { multiplier = -1;}
+    let multiplier = (color == 'black')? -1:1;
     const curPiece = piece[0].innerHTML;
     const rdiff = Math.abs(prevR-curR);
     const cdiff = Math.abs(prevC-curC);
@@ -210,6 +209,7 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
             if(curC == prevC) 
             {
                 let i = prevR + rdiff/(curR-prevR);
+                // check the path if it's being blocked
                 while(i != curR){
                     let cPiece = document.getElementsByClassName("box r"+ i +" c" + curC );
                     if (cPiece[0].innerHTML != '') return false;
@@ -219,6 +219,7 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
             }
             if(curR == prevR){
                 let i = prevC + cdiff/(curC-prevC);
+                // check the path if it's being blocked
                 while(i != curC){
                     const cPiece = document.getElementsByClassName("box r"+ curR +" c" + i );
                     if (cPiece[0].innerHTML != '') return false;
@@ -233,9 +234,11 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
             }
             break;
         case BISHOP:
+            // see if diagonal
             if ((rdiff/cdiff) == 1){
                 let i = prevR + rdiff/(curR-prevR);
                 let j = prevC + cdiff/(curC-prevC);
+                // check the path if it's being blocked
                 while(i != curR && j != curC){
                     const cPiece = document.getElementsByClassName("box r"+ i +" c" + j );
                     if (cPiece[0].innerHTML != '') return false;
@@ -251,36 +254,8 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
             }
             break;
         case QUEEN:
-            if(curC == prevC) 
-            {
-                let i = prevR + rdiff/(curR-prevR);
-                while(i != curR){
-                    let cPiece = document.getElementsByClassName("box r"+ i +" c" + curC );
-                    if (cPiece[0].innerHTML != '') return false;
-                    i = i + rdiff/(curR-prevR);
-                }
-                return true;
-            }
-            if(curR == prevR){
-                let i = prevC + cdiff/(curC-prevC);
-                while(i != curC){
-                    const cPiece = document.getElementsByClassName("box r"+ curR +" c" + i );
-                    if (cPiece[0].innerHTML != '') return false;
-                    i = i + cdiff/(curC-prevC);
-                }
-                return true;
-            }
-            if ((rdiff/cdiff) == 1){
-                let i = prevR + rdiff/(curR-prevR);
-                let j = prevC + cdiff/(curC-prevC);
-                while(i != curR && j != curC){
-                    const cPiece = document.getElementsByClassName("box r"+ i +" c" + j );
-                    if (cPiece[0].innerHTML != '') return false;
-                    i = i + rdiff/(curR-prevR);
-                    j = j + cdiff/(curC-prevC); 
-                }
-                return true;
-            }
+            // combination of rook and bishop checks
+            return (checkMove(curR,curC,prevR,prevC,ROOK,color,piece) || checkMove(curR,curC,prevR,prevC,BISHOP,color,piece));
             break;
     }
     return false;
@@ -301,7 +276,7 @@ function checkPiece(piece){
             const front = document.getElementsByClassName("box r"+ (r-multiplier) +" c" + c );
             const side1 = document.getElementsByClassName("box r"+ (r-multiplier) +" c" + (c+1));
             const side2 = document.getElementsByClassName("box r"+ (r-multiplier) +" c" + (c-1));
-            if (front[0].innerHTML != '' || ((side1[0].innerHTML != '' && side1[0].style.color == color) && (side2[0].innerHTML != '' && side2[0].style.color == color))) return false;
+            if (front[0].innerHTML != '' && ((side1[0].innerHTML == '' || side1[0].style.color == color) && (side2[0].innerHTML == '' || side2[0].style.color == color))) return false;
         case ROOK:
         case KNIGHT:
         case BISHOP:
