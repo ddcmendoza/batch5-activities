@@ -120,7 +120,16 @@ div#footnote{
     opacity: 70%;
 }
 @keyframes highlight{
-    0%{font-size:calc(10vh);}
-    50%{font-size:calc(12.5vh);}
-    100%{font-size:calc(10vh);}
+    0%{
+        font-size:calc(10vh);
+        z-index: 1;
+    }
+    50%{
+        font-size:calc(12.5vh);
+        z-index: 100;
+    }
+    100%{
+        font-size:calc(10vh);
+        z-index: 1;
+    }
 }
