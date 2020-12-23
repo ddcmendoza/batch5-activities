@@ -1,8 +1,8 @@
 /*
 General TODO:
 1. Alternating moves [x]
-2. Move and Move Checking (Move Done? Checking-collision checking(or blockage))
-3. Piece Checking (Started)
+2. Move and Move Checking [x]
+3. Piece Checking [done with Pawn, to follow next]
 4. Victory Condition - Checkmate and Timer running out
 5. En passant/Castling
 6. Timers [x]
@@ -152,7 +152,7 @@ function movePieces(r,c){
 
     else if(!clickingPiece){
         //checks if there's a piece and if the piece can move
-        if(piece[0].innerHTML != '' && colorToMove == piece[0].style.color && checkPiece(piece,r,c)){
+        if(piece[0].innerHTML != '' && colorToMove == piece[0].style.color && checkPiece(piece)){
             console.log("pick up a piece");
             piece[0].style.animation = "highlight 1.5s infinite";
             holdingPiece = piece[0].innerHTML;
@@ -207,7 +207,23 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
             }
             break;
         case ROOK:
-            if(curC == prevC || curR == prevR){
+            if(curC == prevC) 
+            {
+                let i = prevR + rdiff/(curR-prevR);
+                while(i != curR){
+                    let cPiece = document.getElementsByClassName("box r"+ i +" c" + curC );
+                    if (cPiece[0].innerHTML != '') return false;
+                    i = i + rdiff/(curR-prevR);
+                }
+                return true;
+            }
+            if(curR == prevR){
+                let i = prevC + cdiff/(curC-prevC);
+                while(i != curC){
+                    const cPiece = document.getElementsByClassName("box r"+ curR +" c" + i );
+                    if (cPiece[0].innerHTML != '') return false;
+                    i = i + cdiff/(curC-prevC);
+                }
                 return true;
             }
             break;
@@ -218,6 +234,14 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
             break;
         case BISHOP:
             if ((rdiff/cdiff) == 1){
+                let i = prevR + rdiff/(curR-prevR);
+                let j = prevC + cdiff/(curC-prevC);
+                while(i != curR && j != curC){
+                    const cPiece = document.getElementsByClassName("box r"+ i +" c" + j );
+                    if (cPiece[0].innerHTML != '') return false;
+                    i = i + rdiff/(curR-prevR);
+                    j = j + cdiff/(curC-prevC); 
+                }
                 return true;
             }
             break;
@@ -227,10 +251,34 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
             }
             break;
         case QUEEN:
-            if(curC == prevC || curR == prevR){
+            if(curC == prevC) 
+            {
+                let i = prevR + rdiff/(curR-prevR);
+                while(i != curR){
+                    let cPiece = document.getElementsByClassName("box r"+ i +" c" + curC );
+                    if (cPiece[0].innerHTML != '') return false;
+                    i = i + rdiff/(curR-prevR);
+                }
+                return true;
+            }
+            if(curR == prevR){
+                let i = prevC + cdiff/(curC-prevC);
+                while(i != curC){
+                    const cPiece = document.getElementsByClassName("box r"+ curR +" c" + i );
+                    if (cPiece[0].innerHTML != '') return false;
+                    i = i + cdiff/(curC-prevC);
+                }
                 return true;
             }
             if ((rdiff/cdiff) == 1){
+                let i = prevR + rdiff/(curR-prevR);
+                let j = prevC + cdiff/(curC-prevC);
+                while(i != curR && j != curC){
+                    const cPiece = document.getElementsByClassName("box r"+ i +" c" + j );
+                    if (cPiece[0].innerHTML != '') return false;
+                    i = i + rdiff/(curR-prevR);
+                    j = j + cdiff/(curC-prevC); 
+                }
                 return true;
             }
             break;
@@ -242,10 +290,18 @@ function displayMove(r,c,piece){
     //TO DO
 }
 //validate if valid piece to move (i.e. not being blocked by allies)
-function checkPiece(piece,r,c){
+function checkPiece(piece){
     //TO DO
+    const r = getR(piece[0]);
+    const c = getC(piece[0]);
+    const color = piece[0].style.color;
+    const multiplier = (color == 'black') ? -1:1;
     switch(piece[0].innerHTML){
         case PAWN:
+            const front = document.getElementsByClassName("box r"+ (r-multiplier) +" c" + c );
+            const side1 = document.getElementsByClassName("box r"+ (r-multiplier) +" c" + (c+1));
+            const side2 = document.getElementsByClassName("box r"+ (r-multiplier) +" c" + (c-1));
+            if (front[0].innerHTML != '' || ((side1[0].innerHTML != '' && side1[0].style.color == color) && (side2[0].innerHTML != '' && side2[0].style.color == color))) return false;
         case ROOK:
         case KNIGHT:
         case BISHOP:
@@ -272,11 +328,11 @@ function displayTime(time){
 
 //will return the row of the box
 function getR(box){
-    return box.className[5];
+    return Number(box.className[5]);
 }
 
 //will return the column of the box
 function getC(box){
-    return box.className[8];
+    return Number(box.className[8]);
 }
 putChessPieces(); //for testing only
