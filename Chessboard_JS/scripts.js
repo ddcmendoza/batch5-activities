@@ -134,6 +134,7 @@ function movePieces(r,c){
                 whiteMove = true;
                 DESC[0].innerHTML = "White Move";
             }
+            isCheck(piece[0]);
         }
         else{
             //TO DO Display invalid move
@@ -152,7 +153,7 @@ function movePieces(r,c){
 
     else if(!clickingPiece){
         //checks if there's a piece and if the piece can move
-        if(piece[0].innerHTML != '' && colorToMove == piece[0].style.color && checkPiece(piece) && ((isChecked && piece[0].innerHTML==KING) || !isChecked)){
+        if(piece[0].innerHTML != '' && colorToMove == piece[0].style.color && checkPiece(r,c,piece) && ((isChecked && piece[0].innerHTML==KING) || !isChecked)){
             console.log("pick up a piece");
             piece[0].style.animation = "highlight 1.5s infinite";
             holdingPiece = piece[0].innerHTML;
@@ -165,8 +166,14 @@ function movePieces(r,c){
         }
         
     }
+    
 }
+/*Check latest move if it made a check [TODO] */
+function isCheck(piece){
+    let rank = piece.innerHTML;
+    let color = piece.style.color;
 
+}
 /*
 validate if valid move
 will return true if valid
@@ -375,10 +382,8 @@ function displayMove(r,c,piece){
     //TO DO
 }
 //validate if valid piece to move (i.e. not being blocked by allies)
-function checkPiece(piece){
+function checkPiece(r,c,piece){
     //TO DO
-    const r = getR(piece[0]);
-    const c = getC(piece[0]);
     const color = piece[0].style.color;
     const multiplier = (color == 'black') ? -1:1;
     switch(piece[0].innerHTML){
@@ -396,9 +401,10 @@ function checkPiece(piece){
     return true;
 }
 
+
+
 //timers
 function timerWhite(){
-
     wTime = wTime - 1;
     WHITETIME[0].innerHTML = "White - "+displayTime(wTime);
 }
@@ -406,18 +412,7 @@ function timerBlack(){
     bTime = bTime - 1;
     BLACKTIME[0].innerHTML = "Black - "+displayTime(bTime);
 }
-
 function displayTime(time){
     return (Math.floor(time/60)) + ":" + ("0"+(time%60)).slice(-2);
-}
-
-//will return the row of the box
-function getR(box){
-    return Number(box.className[5]);
-}
-
-//will return the column of the box
-function getC(box){
-    return Number(box.className[8]);
 }
 putChessPieces(); //for testing only
