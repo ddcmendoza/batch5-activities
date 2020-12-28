@@ -3,7 +3,7 @@ General TODO:
 1. Alternating moves [x]
 2. Move and Move Checking [x]
 3. Piece Checking [done with Pawn, to follow next]
-4. Victory Condition - Checkmate and Timer running out
+4. Victory Condition - Checkmate and Timer running out [check started]
 5. En passant/Castling
 6. Timers [x]
 7. Pawn promotion
@@ -29,6 +29,7 @@ var holdingR = null;
 var holdingC = null;
 var whiteKing;
 var blackKing;
+var isChecked = false;
 
 //timers and move determination
 var whiteInt;
@@ -97,6 +98,7 @@ function removePieces(){
     DESC[0].innerHTML = "";
     WHITETIME[0].innerHTML = "White - "+displayTime(wTime);
     BLACKTIME[0].innerHTML = "Black - "+displayTime(bTime);
+    isChecked = false;
 
 }
 
@@ -109,10 +111,7 @@ function removePieces(){
 */
 function movePieces(r,c){
     let piece = document.getElementsByClassName("box r"+ r +" c" + c );
-    let colorToMove = 'white';
-    if(!whiteMove){
-        colorToMove = 'black';
-    }
+    let colorToMove = whiteMove? 'white':'black';
     piece[0].style.animation = '';
     if(clickingPiece){
         //check if move is possible
@@ -122,6 +121,7 @@ function movePieces(r,c){
             containerPiece.style.color = "";
             piece[0].innerHTML = holdingPiece;
             piece[0].style.color = holdingPieceColor;
+            isChecked = false;
             if(whiteMove){
                 blackInt = setInterval(timerBlack, 1000);
                 clearInterval(whiteInt);
@@ -152,7 +152,7 @@ function movePieces(r,c){
 
     else if(!clickingPiece){
         //checks if there's a piece and if the piece can move
-        if(piece[0].innerHTML != '' && colorToMove == piece[0].style.color && checkPiece(piece)){
+        if(piece[0].innerHTML != '' && colorToMove == piece[0].style.color && checkPiece(piece) && ((isChecked && piece[0].innerHTML==KING) || !isChecked)){
             console.log("pick up a piece");
             piece[0].style.animation = "highlight 1.5s infinite";
             holdingPiece = piece[0].innerHTML;
@@ -167,10 +167,12 @@ function movePieces(r,c){
     }
 }
 
-//validate if valid move
-//will return true if valid
-//cur = destination, prev = source
-//will need to refactor later
+/*
+validate if valid move
+will return true if valid
+cur = destination, prev = source
+will need to refactor later
+*/
 function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
     let multiplier = (color == 'black')? -1:1;
     const curPiece = piece[0].innerHTML;
@@ -249,7 +251,7 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
             }
             break;
         case KING:
-            if(rdiff <= 1 && cdiff <= 1){
+            if(rdiff <= 1 && cdiff <= 1 && !willBeChecked(curR,curC,color)){
                 return true;
             }
             break;
@@ -258,6 +260,114 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
             return (checkMove(curR,curC,prevR,prevC,ROOK,color,piece) || checkMove(curR,curC,prevR,prevC,BISHOP,color,piece));
             break;
     }
+    return false;
+}
+
+
+/* function for checking if King will be Checked */
+function willBeChecked(R,C,color){
+    /* for ROOK and QUEEN check */
+    for(let i = R - 1; i >= 1; i--){
+        const cPiece = document.getElementsByClassName("box r"+ i +" c" + C);
+        if (cPiece[0].innerHTML != ''){
+            if(cPiece[0].style.color != color && (cPiece[0].innerHTML == ROOK || cPiece[0].innerHTML == QUEEN)) {return true;}
+            break;
+        }
+    }
+    for(let i = R + 1; i <= 8; i++){
+        const cPiece = document.getElementsByClassName("box r"+ i +" c" + C);
+        if (cPiece[0].innerHTML != ''){
+            if(cPiece[0].style.color != color && (cPiece[0].innerHTML == ROOK || cPiece[0].innerHTML == QUEEN)) {return true;}
+            break;
+        }
+    }
+    for(let i = C - 1; i >= 1; i--){
+        const cPiece = document.getElementsByClassName("box r"+ R +" c" + i);
+        if (cPiece[0].innerHTML != ''){
+            if(cPiece[0].style.color != color && (cPiece[0].innerHTML == ROOK || cPiece[0].innerHTML == QUEEN)) {return true;}
+            break;
+        }
+    }
+    for(let i = C + 1; i <= 8; i++){
+        const cPiece = document.getElementsByClassName("box r"+ R +" c" + i);
+        if (cPiece[0].innerHTML != ''){
+            if(cPiece[0].style.color != color && (cPiece[0].innerHTML == ROOK || cPiece[0].innerHTML == QUEEN)) {return true;}
+            break;
+        }
+    }
+    /*for BISHOP and QUEEN check */
+    for(let i = R - 1, j = C - 1; i >= 1 && j >= 1; i--, j--){
+        const cPiece = document.getElementsByClassName("box r"+ i +" c" + j);
+        if (cPiece[0].innerHTML != ''){
+            if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)) {return true;}
+            break;
+        }
+    }
+    for(let i = R - 1, j = C + 1; i >= 1 && j <= 8; i--, j++){
+        const cPiece = document.getElementsByClassName("box r"+ i +" c" + j);
+        if (cPiece[0].innerHTML != ''){
+            if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)) {return true;}
+            break;
+        }
+    }
+    for(let i = R + 1, j = C - 1; i <= 8 && j >= 1; i++, j--){
+        const cPiece = document.getElementsByClassName("box r"+ i +" c" + j);
+        if (cPiece[0].innerHTML != ''){
+            if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)) {return true;}
+            break;
+        }
+    }
+    for(let i = R + 1, j = C + 1; i <= 8 && j <= 8; i++, j++){
+        const cPiece = document.getElementsByClassName("box r"+ i +" c" + j);
+        if (cPiece[0].innerHTML != ''){
+            if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)) {return true;}
+            break;
+        }
+    }
+    /*for KNIGHT check */
+    //ad;lkajdlkasdj brute force muna tinatamad ako magisip hahahahaha
+    if((R+1) <= 8 && (C+2) <= 8){
+        const cPiece1color = document.getElementsByClassName("box r"+ (R+1) +" c" + (C+2))[0].style.color;
+        const cPiece1 = document.getElementsByClassName("box r"+ (R+1) +" c" + (C+2))[0].innerHTML;
+        if(cPiece1color != color && cPiece1 == KNIGHT) return true;
+    }
+    if((R+1) <= 8 && (C-2) >= 1){
+        const cPiece2color = document.getElementsByClassName("box r"+ (R+1) +" c" + (C-2))[0].style.color;
+        const cPiece2 = document.getElementsByClassName("box r"+ (R+1) +" c" + (C-2))[0].innerHTML;
+        if(cPiece2color != color && cPiece2 == KNIGHT) return true;
+    }
+    if((R+2) <= 8 && (C+1) <= 8){
+        const cPiece3color = document.getElementsByClassName("box r"+ (R+2) +" c" + (C+1))[0].style.color;
+        const cPiece3 = document.getElementsByClassName("box r"+ (R+2) +" c" + (C+1))[0].innerHTML;
+        if(cPiece3color != color && cPiece3 == KNIGHT) return true;
+    }
+    if((R+2) <= 8 && (C-1) >= 1){
+        const cPiece4color = document.getElementsByClassName("box r"+ (R+2) +" c" + (C-1))[0].style.color;
+        const cPiece4 = document.getElementsByClassName("box r"+ (R+2) +" c" + (C-1))[0].innerHTML;
+        if(cPiece4color != color && cPiece4 == KNIGHT) return true;
+    }
+    if((R-1) >= 1 && (C+2) <= 8){
+        const cPiece5color = document.getElementsByClassName("box r"+ (R-1) +" c" + (C+2))[0].style.color;
+        const cPiece5 = document.getElementsByClassName("box r"+ (R-1) +" c" + (C+2))[0].innerHTML;
+        if(cPiece5color != color && cPiece5 == KNIGHT) return true;
+    }
+    if((R-1) >= 1 && (C-2) >= 1){
+        const cPiece6color = document.getElementsByClassName("box r"+ (R-1) +" c" + (C-2))[0].style.color;
+        const cPiece6 = document.getElementsByClassName("box r"+ (R-1) +" c" + (C-2))[0].innerHTML;
+        if(cPiece6color != color && cPiece6 == KNIGHT) return true;
+    }
+    if((R-2) >= 1 && (C+1) <= 8){
+        const cPiece7color = document.getElementsByClassName("box r"+ (R-2) +" c" + (C+1))[0].style.color;
+        const cPiece7 = document.getElementsByClassName("box r"+ (R-2) +" c" + (C+1))[0].innerHTML;
+        if(cPiece7color != color && cPiece7 == KNIGHT) return true;
+    }
+    if((R-2)>= 1 && (C-1) >= 1){
+        const cPiece8color = document.getElementsByClassName("box r"+ (R-2) +" c" + (C-1))[0].style.color;
+        const cPiece8 = document.getElementsByClassName("box r"+ (R-2) +" c" + (C-1))[0].innerHTML;
+        if(cPiece8color != color && cPiece8 == KNIGHT) return true;
+    }
+    /*for PAWN check */
+
     return false;
 }
 //TO DO: will highlight valid moves, then put valid class to the valid elements
