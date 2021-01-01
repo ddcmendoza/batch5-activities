@@ -3,8 +3,8 @@ General TODO:
 1. Alternating moves [x]
 2. Move and Move Checking [x]
 3. Piece Checking [done with Pawn, to follow next]
-4. Victory Condition - Checkmate and Timer running out [check started]
-5. En passant [done] /Castling
+4. Victory Condition - Checkmate and Timer running out [check started][timer Check done]
+5. En passant [done] /Castling [done]
 6. Timers [x]
 7. Pawn promotion
 8. *OPTIONAL* - add logging
@@ -183,14 +183,27 @@ function movePieces(r,c){
         }
         
     }
-    
+    checkVictory();
 }
 /*Check latest move if it made a check [TODO] */
 function isCheck(piece){
     let rank = piece.innerHTML;
     let color = piece.style.color;
-
 }
+
+function checkVictory(){
+    if (wTime <= 0){
+        alert('Black Victory!');
+        putChessPieces();
+
+    }
+    else if (bTime <= 0){
+        alert('White Victory!');
+        putChessPieces();
+    }
+    
+}
+
 /*
 validate if valid move
 will return true if valid
@@ -554,10 +567,12 @@ function checkPiece(r,c,piece){
 function timerWhite(){
     wTime = wTime - 1;
     WHITETIME[0].innerHTML = "White - "+displayTime(wTime);
+    checkVictory();
 }
 function timerBlack(){
     bTime = bTime - 1;
     BLACKTIME[0].innerHTML = "Black - "+displayTime(bTime);
+    checkVictory();
 }
 function displayTime(time){
     return (Math.floor(time/60)) + ":" + ("0"+(time%60)).slice(-2);
