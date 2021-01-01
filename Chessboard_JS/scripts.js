@@ -4,14 +4,12 @@ General TODO:
 2. Move and Move Checking [x]
 3. Piece Checking [done with Pawn, to follow next]
 4. Victory Condition - Checkmate and Timer running out [check started]
-5. En passant/Castling
+5. En passant [done] /Castling
 6. Timers [x]
 7. Pawn promotion
 8. *OPTIONAL* - add logging
 
 */
-
-
 //assigning chess pieces characters
 const PAWN = "♟";
 const ROOK = "♜";
@@ -30,6 +28,10 @@ var holdingC = null;
 var whiteKing;
 var blackKing;
 var isChecked = false;
+var enPassantAvailable = false;
+var roundsEnPassant;
+var castlingAvailable = [true, true, true ,true]; // [WL, WR, BL, BR] == [WhiteLeft, WhiteRight, BlackLeft, BlackRight]
+
 
 //timers and move determination
 var whiteInt;
@@ -81,6 +83,12 @@ function putChessPieces() {
      whiteKing = BOX[60];
      blackKing = BOX[4];
 }
+// function for clearing id of box
+function clearID(){
+    for(let i = 0; i < BOX.length;i++){
+        BOX[i].id = '';
+    }
+}
 
 //function for clearing the board
 function removePieces(){
@@ -122,6 +130,15 @@ function movePieces(r,c){
             piece[0].innerHTML = holdingPiece;
             piece[0].style.color = holdingPieceColor;
             isChecked = false;
+            if(enPassantAvailable){
+                if (roundsEnPassant == 1){
+                    roundsEnPassant = 0;
+                }
+                else {
+                    enPassantAvailable = false;
+                    clearID();
+                }
+            }
             if(whiteMove){
                 blackInt = setInterval(timerBlack, 1000);
                 clearInterval(whiteInt);
@@ -188,6 +205,16 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
     switch(holdPiece){
         case PAWN:
             // lol definitely will change later, but good for now 12/20/2020
+            // En Passant condition
+            if (enPassantAvailable){
+                    let cPiece = document.getElementsByClassName("box r"+ (prevR) +" c" + (curC))
+                    if (curPiece == '' && cPiece[0].id == 'enPassant' && (curR == 3|| curR==6)){
+                        cPiece[0].id = '';
+                        cPiece[0].innerHTML = '';
+                        cPiece[0].style.color = '';
+                        return true;
+                    }
+            }
             // when not in the starting square
             if((curR+(multiplier*1))*multiplier < (prevR)*multiplier && !(prevR ==7 || prevR ==2)){
                 return false;
@@ -205,6 +232,15 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
             if(curPiece == ''){
                 if((curR+(multiplier*2))*multiplier < (prevR)*multiplier){
                     return false;
+                }
+                if (Math.abs(curR-prevR) == 2) {
+                    if(enPassantAvailable){
+                        clearID();
+                    }
+                    console.log('en passant available');
+                    piece[0].id = 'enPassant';
+                    enPassantAvailable = true;
+                    roundsEnPassant = 1;
                 }
                 if(curC != prevC){
                     return false;
@@ -224,6 +260,22 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
                     if (cPiece[0].innerHTML != '') return false;
                     i = i + rdiff/(curR-prevR);
                 }
+                if(whiteMove){
+                    if(prevC == 1){
+                        castlingAvailable[0] = false;
+                    }
+                    if(prevC == 8){
+                        castlingAvailable[1] = false;
+                    }
+                }
+                else{
+                    if(prevC == 1){
+                        castlingAvailable[2] = false;
+                    }
+                    if(prevC == 8){
+                        castlingAvailable[3] = false;
+                    }
+                }
                 return true;
             }
             if(curR == prevR){
@@ -233,6 +285,22 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
                     const cPiece = document.getElementsByClassName("box r"+ curR +" c" + i );
                     if (cPiece[0].innerHTML != '') return false;
                     i = i + cdiff/(curC-prevC);
+                }
+                if(whiteMove){
+                    if(prevC == 1){
+                        castlingAvailable[0] = false;
+                    }
+                    if(prevC == 8){
+                        castlingAvailable[1] = false;
+                    }
+                }
+                else{
+                    if(prevC == 1){
+                        castlingAvailable[2] = false;
+                    }
+                    if(prevC == 8){
+                        castlingAvailable[3] = false;
+                    }
                 }
                 return true;
             }
@@ -258,7 +326,85 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
             }
             break;
         case KING:
+            // will refactor castling later
+            if (prevC - curC == 2 && prevR == curR){
+                // left castling
+                let bet1 = document.getElementsByClassName("box r"+ curR +" c" + 2);
+                let bet2 = document.getElementsByClassName("box r"+ curR +" c" + 3);
+                let bet3 = document.getElementsByClassName("box r"+ curR +" c" + 4);
+                if (bet1[0].innerHTML != '') return false;
+                if (bet2[0].innerHTML != '') return false;
+                if (bet3[0].innerHTML != '') return false;
+                let rook = document.getElementsByClassName("box r"+ curR +" c" + 1);
+                let des = document.getElementsByClassName("box r"+ curR +" c" + 4);
+                if (whiteMove){
+                    let res = castlingAvailable[0];
+                    castlingAvailable[0] = false;
+                    castlingAvailable[1] = false;
+                    if(res){
+                        des[0].innerHTML = rook[0].innerHTML;
+                        des[0].style.color = rook[0].style.color;
+                        rook[0].innerHTML = '';
+                        rook[0].style.color = '';
+                    }
+                    return res;
+                }
+                else{
+                    let res = castlingAvailable[2];
+                    castlingAvailable[3] = false;
+                    castlingAvailable[2] = false;
+                    if(res){
+                        des[0].innerHTML = rook[0].innerHTML;
+                        des[0].style.color = rook[0].style.color;
+                        rook[0].innerHTML = '';
+                        rook[0].style.color = '';
+                    }
+                    return res;
+                }
+            }
+            else if(prevC - curC == -2 && prevR == curR){
+                //right castling
+                let bet1 = document.getElementsByClassName("box r"+ curR +" c" + 6);
+                let bet2 = document.getElementsByClassName("box r"+ curR +" c" + 7);
+                if (bet1[0].innerHTML != '') return false;
+                if (bet2[0].innerHTML != '') return false;
+                let rook = document.getElementsByClassName("box r"+ curR +" c" + 8 );
+                let des = document.getElementsByClassName("box r"+ curR +" c" + 6);
+                if(whiteMove){
+                    let res = castlingAvailable[1];
+                    castlingAvailable[0] = false;
+                    castlingAvailable[1] = false;
+                    if(res){
+                        des[0].innerHTML = rook[0].innerHTML;
+                        des[0].style.color = rook[0].style.color;
+                        rook[0].innerHTML = '';
+                        rook[0].style.color = '';
+                    }
+                    return res;
+
+                }
+                else{
+                    let res = castlingAvailable[3]
+                    castlingAvailable[3] = false;
+                    castlingAvailable[2] = false;
+                    if(res){
+                        des[0].innerHTML = rook[0].innerHTML;
+                        des[0].style.color = rook[0].style.color;
+                        rook[0].innerHTML = '';
+                        rook[0].style.color = '';
+                    }
+                    return res;
+                }
+            }
             if(rdiff <= 1 && cdiff <= 1 && !willBeChecked(curR,curC,color)){
+                if(whiteMove){
+                    castlingAvailable[0] = false;
+                    castlingAvailable[1] = false;
+                }
+                else{
+                    castlingAvailable[2] = false;
+                    castlingAvailable[3] = false;
+                }
                 return true;
             }
             break;
@@ -269,6 +415,7 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
     }
     return false;
 }
+
 
 
 /* function for checking if King will be Checked */
