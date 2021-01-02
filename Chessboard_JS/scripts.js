@@ -2,7 +2,7 @@
 General TODO:
 1. Alternating moves [x]
 2. Move and Move Checking [x]
-3. Piece Checking [done with Pawn, to follow next]
+3. Piece Checking [done with Pawn and check, to follow next]
 4. Victory Condition - Checkmate and Timer running out [check started][timer Check done]
 5. En passant [done] /Castling [done]
 6. Timers [x]
@@ -10,6 +10,7 @@ General TODO:
 8. *OPTIONAL* - add logging
 
 */
+
 //assigning chess pieces characters
 const PAWN = "♟";
 const ROOK = "♜";
@@ -25,13 +26,15 @@ var holdingPieceColor = null;
 var containerPiece = null;
 var holdingR = null;
 var holdingC = null;
-var whiteKing;
-var blackKing;
 var isChecked = false;
 var enPassantAvailable = false;
 var roundsEnPassant;
 var castlingAvailable = [true, true, true ,true]; // [WL, WR, BL, BR] == [WhiteLeft, WhiteRight, BlackLeft, BlackRight]
-
+var whiteVictory = false;
+var blackVictory = false;
+var staleMate = false;
+var whiteKing = [8,5]; //white king Position
+var blackKing = [1,5]; //Black King Position
 
 //timers and move determination
 var whiteInt;
@@ -80,8 +83,6 @@ function putChessPieces() {
             BOX[i].style.color = 'black';
         }
      }
-     whiteKing = BOX[60];
-     blackKing = BOX[4];
 }
 // function for clearing id of box
 function clearID(){
@@ -102,6 +103,8 @@ function removePieces(){
     clearInterval(blackInt);
     wTime = 60*15;
     bTime = 60*15;
+    whiteKing = [8,5];
+    blackKing = [1,5];
     whiteMove = true;
     DESC[0].innerHTML = "";
     WHITETIME[0].innerHTML = "White - "+displayTime(wTime);
@@ -185,7 +188,7 @@ function movePieces(r,c){
     }
     checkVictory();
 }
-/*Check latest move if it made a check [TODO] */
+/*Check latest move if it made a check [TODO] required for victory condition */
 function isCheck(piece){
     let rank = piece.innerHTML;
     let color = piece.style.color;
@@ -212,6 +215,7 @@ will need to refactor later
 */
 function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
     let multiplier = (color == 'black')? -1:1;
+
     const curPiece = piece[0].innerHTML;
     const rdiff = Math.abs(prevR-curR);
     const cdiff = Math.abs(prevC-curC);
@@ -359,6 +363,7 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
                         des[0].style.color = rook[0].style.color;
                         rook[0].innerHTML = '';
                         rook[0].style.color = '';
+                        whiteKing = [curR, curC];
                     }
                     return res;
                 }
@@ -371,6 +376,7 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
                         des[0].style.color = rook[0].style.color;
                         rook[0].innerHTML = '';
                         rook[0].style.color = '';
+                        blackKing = [curR, curC];
                     }
                     return res;
                 }
@@ -392,6 +398,7 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
                         des[0].style.color = rook[0].style.color;
                         rook[0].innerHTML = '';
                         rook[0].style.color = '';
+                        whiteKing = [curR, curC];
                     }
                     return res;
 
@@ -405,6 +412,7 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
                         des[0].style.color = rook[0].style.color;
                         rook[0].innerHTML = '';
                         rook[0].style.color = '';
+                        blackKing = [curR, curC];
                     }
                     return res;
                 }
@@ -413,10 +421,12 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
                 if(whiteMove){
                     castlingAvailable[0] = false;
                     castlingAvailable[1] = false;
+                    whiteKing = [curR, curC];
                 }
                 else{
                     castlingAvailable[2] = false;
                     castlingAvailable[3] = false;
+                    blackKing = [curR, curC];
                 }
                 return true;
             }
@@ -428,8 +438,6 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
     }
     return false;
 }
-
-
 
 /* function for checking if King will be Checked */
 function willBeChecked(R,C,color){
@@ -533,7 +541,22 @@ function willBeChecked(R,C,color){
         const cPiece8 = document.getElementsByClassName("box r"+ (R-2) +" c" + (C-1))[0].innerHTML;
         if(cPiece8color != color && cPiece8 == KNIGHT) return true;
     }
-    /*for PAWN check */
+    /*for PAWN check TODO */
+    if (whiteMove){
+        //if white needs to be careful on pawn in front (i.e. row is lower)
+        const cPiece1 = document.getElementsByClassName("box r"+ (R-1) +" c" + (C-1));
+        const cPiece2 = document.getElementsByClassName("box r"+ (R-1) +" c" + (C+1));
+        if(cPiece1[0].style.color != color && cPiece1[0].innerHTML == PAWN) {return true;}
+        if(cPiece2[0].style.color != color && cPiece2[0].innerHTML == PAWN) {return true;}
+    }
+    else{
+        //if black needs to be careful on pawn in back (i.e. row is higher)
+        const cPiece1 = document.getElementsByClassName("box r"+ (R+1) +" c" + (C-1));
+        const cPiece2 = document.getElementsByClassName("box r"+ (R+1) +" c" + (C+1));
+        if(cPiece1[0].style.color != color && cPiece1[0].innerHTML == PAWN) {return true;}
+        if(cPiece2[0].style.color != color && cPiece2[0].innerHTML == PAWN) {return true;}
+
+    }
 
     return false;
 }
@@ -541,23 +564,157 @@ function willBeChecked(R,C,color){
 function displayMove(r,c,piece){
     //TO DO
 }
-//validate if valid piece to move (i.e. not being blocked by allies)
+//validate if valid piece to move (i.e. not being blocked by allies or will not lead to a check)
 function checkPiece(r,c,piece){
-    //TO DO
+    /*
+    TO DO
+    LOGIC:
+    Piece can't be selected IF blocked OR will lead to a check of KING
+     */
     const color = piece[0].style.color;
     const multiplier = (color == 'black') ? -1:1;
     switch(piece[0].innerHTML){
         case PAWN:
+            // blocked case
             const front = document.getElementsByClassName("box r"+ (r-multiplier) +" c" + c );
             const side1 = document.getElementsByClassName("box r"+ (r-multiplier) +" c" + (c+1));
             const side2 = document.getElementsByClassName("box r"+ (r-multiplier) +" c" + (c-1));
             if (front[0].innerHTML != '' && ((side1[0].innerHTML == '' || side1[0].style.color == color) && (side2[0].innerHTML == '' || side2[0].style.color == color))) return false;
+            break;
         case ROOK:
+            // blocked case
+            break;
         case KNIGHT:
+            // blocked case
+            break;
         case BISHOP:
+            // blocked case
+            break;
         case KING:
+            // blocked case
+            break;
         case QUEEN:
+            // blocked case
+            break;
     }
+    // check case
+    // row and column scanners
+    let ifront = (r + 1) <= 8? (r+1):null;
+    let iback = (r - 1) >= 1? (r-1):null;
+    let jfront = (c + 1) <= 8? (c+1):null;
+    let jback = (c - 1) >= 1? (c-1):null;
+    // diagonal scanners
+    let diag1 = [ifront, jfront];
+    let diag2 = [ifront, jback];
+    let diag3 = [iback, jfront];
+    let diag4 = [iback, jback];
+    while(ifront || iback || jfront || jback || (diag1[0] && diag1[1]) || (diag2[0] && diag2[1]) || (diag3[0] && diag3[1]) || (diag4[0] && diag4[1])){
+        if(ifront){
+            const frontPiece = document.getElementsByClassName("box r"+ ifront +" c" + c);
+            if (frontPiece[0].innerHTML == KING && frontPiece[0].style.color == color){
+                // do check on the back to see if enemy rook or queen is present, if yes, return false
+                for(let x = r - 1; x >= 1; x--){
+                    const cPiece = document.getElementsByClassName("box r"+ x + " c" + c);
+                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == ROOK || cPiece[0].innerHTML == QUEEN)){
+                        return false;
+                    }
+                }
+            }
+            ifront = (ifront + 1) <= 8? (ifront+1):null;
+        }
+        if(iback){
+             const backPiece = document.getElementsByClassName("box r"+ iback +" c" + c);
+             if (backPiece[0].innerHTML == KING && backPiece[0].style.color == color){
+                // do check on the front to see if enemy rook or queen is present, if yes, return false
+                for(let x = r + 1; x <= 8; x++){
+                    const cPiece = document.getElementsByClassName("box r"+ x + " c" + c);
+                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == ROOK || cPiece[0].innerHTML == QUEEN)){
+                        return false;
+                    }
+                }
+            }
+            iback = (iback - 1) >= 1? (iback-1):null;
+        }
+        if(jfront){ 
+            const rightPiece = document.getElementsByClassName("box r"+ r +" c" + jfront);
+            if (rightPiece[0].innerHTML == KING && rightPiece[0].style.color == color){
+                // do check on the left to see if enemy rook or queen is present, if yes, return false
+                for(let x = c - 1; x >= 1; x--){
+                    const cPiece = document.getElementsByClassName("box r"+ r + " c" + x);
+                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == ROOK || cPiece[0].innerHTML == QUEEN)){
+                        return false;
+                    }
+                }
+            }
+            jfront = (jfront + 1) <= 8? (jfront+1):null;
+        }
+        if(jback){ 
+            const leftPiece = document.getElementsByClassName("box r"+ r +" c" + jback);
+            if (leftPiece[0].innerHTML == KING && leftPiece[0].style.color == color){
+                // do check on the right to see if enemy rook or queen is present, if yes, return false
+                for(let x = c + 1; x <= 8; x++){
+                    const cPiece = document.getElementsByClassName("box r"+ r + " c" + x);
+                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == ROOK || cPiece[0].innerHTML == QUEEN)){
+                        return false;
+                    }
+                }
+            }
+            jback = (jback - 1) >= 1? (jback-1):null;
+        }
+        if(diag1[0] && diag1[1]){
+            const diagPiece1 = document.getElementsByClassName("box r"+ diag1[0] +" c" + diag1[1]);
+            if(diagPiece1[0].innerHTML == KING && diagPiece1[0].style.color == color){
+                // do check on the opposite diagonal to see if enemy bishop or queen is present, if yes, return false
+                for(let x = r - 1, y = c - 1; x >= 1 && y >= 1; x--, y--){
+                    const cPiece = document.getElementsByClassName("box r"+ x + " c" + y);
+                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)){
+                        return false;
+                    }
+                }
+            }
+            diag1 = [ifront, jfront];
+        }
+        if(diag2[0] && diag2[1]){
+            const diagPiece2 = document.getElementsByClassName("box r"+ diag2[0] +" c" + diag2[1]);
+            if(diagPiece2[0].innerHTML == KING && diagPiece2[0].style.color == color){
+                // do check on the opposite diagonal to see if enemy bishop or queen is present, if yes, return false
+                for(let x = r - 1, y = c + 1; x >= 1 && y <= 8; x--, y++){
+                    const cPiece = document.getElementsByClassName("box r"+ x + " c" + y);
+                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)){
+                        return false;
+                    }
+                }
+            }
+            diag2 = [ifront, jback];
+        }
+        if(diag3[0] && diag3[1]){
+            const diagPiece3 = document.getElementsByClassName("box r"+ diag3[0] +" c" + diag3[1]);
+            if(diagPiece3[0].innerHTML == KING && diagPiece3[0].style.color == color){
+                // do check on the opposite diagonal to see if enemy bishop or queen is present, if yes, return false
+                for(let x = r + 1, y = c - 1; x <= 8 && y >= 1; x++, y--){
+                    const cPiece = document.getElementsByClassName("box r"+ x + " c" + y);
+                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)){
+                        return false;
+                    }
+                }
+            }
+            diag3 = [iback, jfront];
+        }
+        if(diag4[0] && diag4[1]){
+            const diagPiece4 = document.getElementsByClassName("box r"+ diag4[0] +" c" + diag4[1]);
+            if(diagPiece4[0].innerHTML == KING && diagPiece4[0].style.color == color){
+                // do check on the opposite diagonal to see if enemy bishop or queen is present, if yes, return false
+                for(let x = r + 1, y = c + 1; x <= 8 && y <= 8; x++, y++){
+                    const cPiece = document.getElementsByClassName("box r"+ x + " c" + y);
+                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)){
+                        return false;
+                    }
+                }
+            }
+            diag4 = [iback, jback];
+        }
+    }
+
     return true;
 }
 
@@ -577,4 +734,4 @@ function timerBlack(){
 function displayTime(time){
     return (Math.floor(time/60)) + ":" + ("0"+(time%60)).slice(-2);
 }
-putChessPieces(); //for testing only
+putChessPieces(); 
