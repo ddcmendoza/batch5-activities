@@ -4,8 +4,9 @@ General TODO:
 2. Move and Move Checking [x]
 3. Piece Checking [x]
 4. Victory Condition - Checkmate and Timer running out [check started][timer Check done]
-    Tasks: 
-    -finish isCheck() function 
+    Tasks:
+    -finish isCheck() function [done]
+    -checkPiece() function update when isChecked
     -make a function to count available piece for movement [done]
 5. En passant [x] /Castling [x]
 6. Timers [x]
@@ -31,6 +32,7 @@ var isChecked = false;
 var enPassantAvailable = false;
 var roundsEnPassant;
 var castlingAvailable = [true, true, true ,true]; // [WL, WR, BL, BR] == [WhiteLeft, WhiteRight, BlackLeft, BlackRight]
+
 var whiteVictory = false;
 var blackVictory = false;
 var staleMate = false;
@@ -134,6 +136,7 @@ function movePieces(r,c){
             piece[0].innerHTML = holdingPiece;
             piece[0].style.color = holdingPieceColor;
             isChecked = false;
+            // Pawn Promotion 
             if(whiteMove){
                 if(piece[0].innerHTML == PAWN && r == 1){
                     let promotion = prompt("Q - Queen, K - Knight, R - Rook, B - Bishop");
@@ -172,6 +175,8 @@ function movePieces(r,c){
                     }
                 }
             }
+
+            // En Passant
             if(enPassantAvailable){
                 if (roundsEnPassant == 1){
                     roundsEnPassant = 0;
@@ -191,8 +196,9 @@ function movePieces(r,c){
             if(whiteMove){
                 blackInt = setInterval(timerBlack, 1000);
                 clearInterval(whiteInt);
-                if(isCheck(piece[0])){
+                if(isCheck(piece[0].innerHTML,r,c,piece[0].style.color)){
                     DESC[0].innerHTML = "Black Move - Check";
+                    isChecked = true;
                     if (!stillCanMove()){
                         alert('Black Victory!');
                         putChessPieces();
@@ -210,8 +216,9 @@ function movePieces(r,c){
             else{
                 whiteInt = setInterval(timerWhite, 1000);
                 clearInterval(blackInt);
-                if(isCheck(piece[0])){
+                if(isCheck(piece[0].innerHTML,r,c,piece[0].style.color)){
                     DESC[0].innerHTML = "White Move - Check";
+                    isChecked = true;
                     if(!stillCanMove()){
                         alert('White Victory!');
                         putChessPieces();
@@ -226,7 +233,6 @@ function movePieces(r,c){
                 }
                 whiteMove = true;
             }
-            
         }
         else{
             //TO DO Display invalid move
@@ -261,17 +267,129 @@ function movePieces(r,c){
     }
     checkVictory();
 }
-/*Check latest move if it made a check [TODO] required for victory condition */
-function isCheck(piece){
-    let rank = piece.innerHTML;
-    let color = piece.style.color;
+/*Check latest move if it made a check [TODO] required for victory condition functions opposite to willBeChecked(), will refactor later*/
+function isCheck(rank,R,C,color){
     switch(rank){
         case PAWN:
+            if (whiteMove){
+                //if white needs to be careful on pawn in front (i.e. row is lower)
+                const cPiece1 = document.getElementsByClassName("box r"+ (R-1) +" c" + (C-1));
+                const cPiece2 = document.getElementsByClassName("box r"+ (R-1) +" c" + (C+1));
+                if(cPiece1[0].style.color != color && cPiece1[0].innerHTML == KING) {return true;}
+                if(cPiece2[0].style.color != color && cPiece2[0].innerHTML == KING) {return true;}
+            }
+            else{
+                //if black needs to be careful on pawn in back (i.e. row is higher)
+                const cPiece1 = document.getElementsByClassName("box r"+ (R+1) +" c" + (C-1));
+                const cPiece2 = document.getElementsByClassName("box r"+ (R+1) +" c" + (C+1));
+                if(cPiece1[0].style.color != color && cPiece1[0].innerHTML == KING) {return true;}
+                if(cPiece2[0].style.color != color && cPiece2[0].innerHTML == KING) {return true;}
+            }
+            break;
         case ROOK:
+        for(let i = R - 1; i >= 1; i--){
+            const cPiece = document.getElementsByClassName("box r"+ i +" c" + C);
+            if (cPiece[0].innerHTML != ''){
+                if(cPiece[0].style.color != color && cPiece[0].innerHTML == KING) {return true;}
+                break;
+            }
+        }
+        for(let i = R + 1; i <= 8; i++){
+            const cPiece = document.getElementsByClassName("box r"+ i +" c" + C);
+            if (cPiece[0].innerHTML != ''){
+                if(cPiece[0].style.color != color && cPiece[0].innerHTML == KING) {return true;}
+                break;
+            }
+        }
+        for(let i = C - 1; i >= 1; i--){
+            const cPiece = document.getElementsByClassName("box r"+ R +" c" + i);
+            if (cPiece[0].innerHTML != ''){
+                if(cPiece[0].style.color != color && cPiece[0].innerHTML == KING) {return true;}
+                break;
+            }
+        }
+        for(let i = C + 1; i <= 8; i++){
+            const cPiece = document.getElementsByClassName("box r"+ R +" c" + i);
+            if (cPiece[0].innerHTML != ''){
+                if(cPiece[0].style.color != color && cPiece[0].innerHTML == KING) {return true;}
+                break;
+            }
+        }
+        break;
         case KNIGHT:
+            if((R+1) <= 8 && (C+2) <= 8){
+                const cPiece1color = document.getElementsByClassName("box r"+ (R+1) +" c" + (C+2))[0].style.color;
+                const cPiece1 = document.getElementsByClassName("box r"+ (R+1) +" c" + (C+2))[0].innerHTML;
+                if(cPiece1color != color && cPiece1 == KING) return true;
+            }
+            if((R+1) <= 8 && (C-2) >= 1){
+                const cPiece2color = document.getElementsByClassName("box r"+ (R+1) +" c" + (C-2))[0].style.color;
+                const cPiece2 = document.getElementsByClassName("box r"+ (R+1) +" c" + (C-2))[0].innerHTML;
+                if(cPiece2color != color && cPiece2 == KING) return true;
+            }
+            if((R+2) <= 8 && (C+1) <= 8){
+                const cPiece3color = document.getElementsByClassName("box r"+ (R+2) +" c" + (C+1))[0].style.color;
+                const cPiece3 = document.getElementsByClassName("box r"+ (R+2) +" c" + (C+1))[0].innerHTML;
+                if(cPiece3color != color && cPiece3 == KING) return true;
+            }
+            if((R+2) <= 8 && (C-1) >= 1){
+                const cPiece4color = document.getElementsByClassName("box r"+ (R+2) +" c" + (C-1))[0].style.color;
+                const cPiece4 = document.getElementsByClassName("box r"+ (R+2) +" c" + (C-1))[0].innerHTML;
+                if(cPiece4color != color && cPiece4 == KING) return true;
+            }
+            if((R-1) >= 1 && (C+2) <= 8){
+                const cPiece5color = document.getElementsByClassName("box r"+ (R-1) +" c" + (C+2))[0].style.color;
+                const cPiece5 = document.getElementsByClassName("box r"+ (R-1) +" c" + (C+2))[0].innerHTML;
+                if(cPiece5color != color && cPiece5 == KING) return true;
+            }
+            if((R-1) >= 1 && (C-2) >= 1){
+                const cPiece6color = document.getElementsByClassName("box r"+ (R-1) +" c" + (C-2))[0].style.color;
+                const cPiece6 = document.getElementsByClassName("box r"+ (R-1) +" c" + (C-2))[0].innerHTML;
+                if(cPiece6color != color && cPiece6 == KING) return true;
+            }
+            if((R-2) >= 1 && (C+1) <= 8){
+                const cPiece7color = document.getElementsByClassName("box r"+ (R-2) +" c" + (C+1))[0].style.color;
+                const cPiece7 = document.getElementsByClassName("box r"+ (R-2) +" c" + (C+1))[0].innerHTML;
+                if(cPiece7color != color && cPiece7 == KING) return true;
+            }
+            if((R-2)>= 1 && (C-1) >= 1){
+                const cPiece8color = document.getElementsByClassName("box r"+ (R-2) +" c" + (C-1))[0].style.color;
+                const cPiece8 = document.getElementsByClassName("box r"+ (R-2) +" c" + (C-1))[0].innerHTML;
+                if(cPiece8color != color && cPiece8 == KING) return true;
+            }
+            break;
         case BISHOP:
+            for(let i = R - 1, j = C - 1; i >= 1 && j >= 1; i--, j--){
+                const cPiece = document.getElementsByClassName("box r"+ i +" c" + j);
+                if (cPiece[0].innerHTML != ''){
+                    if(cPiece[0].style.color != color && cPiece[0].innerHTML == KING) {return true;}
+                    break;
+                }
+            }
+            for(let i = R - 1, j = C + 1; i >= 1 && j <= 8; i--, j++){
+                const cPiece = document.getElementsByClassName("box r"+ i +" c" + j);
+                if (cPiece[0].innerHTML != ''){
+                    if(cPiece[0].style.color != color && cPiece[0].innerHTML == KING) {return true;}
+                    break;
+                }
+            }
+            for(let i = R + 1, j = C - 1; i <= 8 && j >= 1; i++, j--){
+                const cPiece = document.getElementsByClassName("box r"+ i +" c" + j);
+                if (cPiece[0].innerHTML != ''){
+                    if(cPiece[0].style.color != color && cPiece[0].innerHTML == KING) {return true;}
+                    break;
+                }
+            }
+            for(let i = R + 1, j = C + 1; i <= 8 && j <= 8; i++, j++){
+                const cPiece = document.getElementsByClassName("box r"+ i +" c" + j);
+                if (cPiece[0].innerHTML != ''){
+                    if(cPiece[0].style.color != color && cPiece[0].innerHTML == KING) {return true;}
+                    break;
+                }
+            }
+            break;
         case QUEEN:
-        case KING:
+            return (isCheck(ROOK,R,C,color) || isCheck(BISHOP,R,C,color));
     }
     return false;
 }
@@ -685,7 +803,7 @@ function checkPiece(r,c,piece,color){
         case PAWN:
             // blocked case
             const front = document.getElementsByClassName("box r"+ (r-multiplier) +" c" + c );
-            const side1 = document.getElementsByClassName("box r"+ (r-multiplier) +" c" + (c+1));
+            const side1 = document.getElementsByClassName("box r"+ (r-multiplier) +" c" + (parseInt(c)+1));
             const side2 = document.getElementsByClassName("box r"+ (r-multiplier) +" c" + (c-1));
             if (front[0].innerHTML != '' && ((side1[0].innerHTML == '' || side1[0].style.color == color) && (side2[0].innerHTML == '' || side2[0].style.color == color))) return false;
             break;
@@ -926,16 +1044,15 @@ function checkPiece(r,c,piece,color){
             if(diagPiece4[0].innerHTML != ''){diag4 = [null,null];}
         }
     }
-    if(isCheck()){
+    if(isChecked){
         /*TO DO
         Logic:
         if Check, piece that can only move are piece that can capture the check or can block the check or KING
          */
+
     }
     return true;
 }
-
-
 
 //timers
 function timerWhite(){
