@@ -4,11 +4,12 @@ General TODO:
 2. Move and Move Checking [x]
 3. Piece Checking [x]
 4. Victory Condition - Checkmate and Timer running out [check started][timer Check done]
+    Tasks: 
+    -finish isCheck() function 
+    -make a function to count available piece for movement
 5. En passant [x] /Castling [x]
 6. Timers [x]
-7. Pawn promotion
-8. *OPTIONAL* - add logging
-
+7. Pawn promotion [x]
 */
 
 //assigning chess pieces characters
@@ -133,6 +134,44 @@ function movePieces(r,c){
             piece[0].innerHTML = holdingPiece;
             piece[0].style.color = holdingPieceColor;
             isChecked = false;
+            if(whiteMove){
+                if(piece[0].innerHTML == PAWN && r == 1){
+                    let promotion = prompt("Q - Queen, K - Knight, R - Rook, B - Bishop");
+                    switch(promotion){
+                        case 'Q':
+                            piece[0].innerHTML = QUEEN;
+                            break;
+                        case 'K':
+                            piece[0].innerHTML = KNIGHT;
+                            break;
+                        case 'R':
+                            piece[0].innerHTML = ROOK;
+                            break;
+                        case 'B':
+                            piece[0].innerHTML = BISHOP;
+                            break;
+                    }
+                }
+            }
+            else{
+                if(piece[0].innerHTML == PAWN && r == 8){
+                    let promotion = prompt("Q - Queen, K - Knight, R - Rook, B - Bishop");
+                    switch(promotion){
+                        case 'Q':
+                            piece[0].innerHTML = QUEEN;
+                            break;
+                        case 'K':
+                            piece[0].innerHTML = KNIGHT;
+                            break;
+                        case 'R':
+                            piece[0].innerHTML = ROOK;
+                            break;
+                        case 'B':
+                            piece[0].innerHTML = BISHOP;
+                            break;
+                    }
+                }
+            }
             if(enPassantAvailable){
                 if (roundsEnPassant == 1){
                     roundsEnPassant = 0;
@@ -146,15 +185,25 @@ function movePieces(r,c){
                 blackInt = setInterval(timerBlack, 1000);
                 clearInterval(whiteInt);
                 whiteMove = false;
-                DESC[0].innerHTML = "Black Move";
+                if(isCheck(piece[0])){
+                    DESC[0].innerHTML = "Black Move - Check";
+                }
+                else{
+                    DESC[0].innerHTML = "Black Move";
+                }
             }
             else{
                 whiteInt = setInterval(timerWhite, 1000);
                 clearInterval(blackInt);
                 whiteMove = true;
-                DESC[0].innerHTML = "White Move";
+                if(isCheck(piece[0])){
+                    DESC[0].innerHTML = "White Move - Check";
+                }
+                else{
+                    DESC[0].innerHTML = "White Move";
+                }
             }
-            isCheck(piece[0]);
+            
         }
         else{
             //TO DO Display invalid move
@@ -173,7 +222,8 @@ function movePieces(r,c){
 
     else if(!clickingPiece){
         //checks if there's a piece and if the piece can move
-        if(piece[0].innerHTML != '' && colorToMove == piece[0].style.color && checkPiece(r,c,piece[0].innerHTML,piece[0].style.color) && ((isChecked && piece[0].innerHTML==KING) || !isChecked)){
+        if(piece[0].innerHTML != '' && colorToMove == piece[0].style.color && checkPiece(r,c,piece[0].innerHTML,piece[0].style.color) ){
+            //&& ((isChecked && piece[0].innerHTML==KING) || !isChecked) <= wrong logic should also check if a piece can move such that it can remove the check
             console.log("pick up a piece");
             piece[0].style.animation = "highlight 1.5s infinite";
             holdingPiece = piece[0].innerHTML;
@@ -192,8 +242,24 @@ function movePieces(r,c){
 function isCheck(piece){
     let rank = piece.innerHTML;
     let color = piece.style.color;
+    switch(rank){
+        case PAWN:
+        case ROOK:
+        case KNIGHT:
+        case BISHOP:
+        case QUEEN:
+        case KING:
+    }
+    return false;
 }
 
+/* Victory Checking function 
+    Logic: 
+        Checkmate:
+            -if isCheck() && whiteMove and # of available moves = 0  => Black Wins
+            -if isCheck() && !whiteMove and # of available moves = 0 => White Wins
+            -if !isCheck() and # of available moves = 0 => Stalemate
+*/
 function checkVictory(){
     if (wTime <= 0){
         alert('Black Victory!');
@@ -206,6 +272,7 @@ function checkVictory(){
     }
     
 }
+
 
 /*
 validate if valid move
@@ -569,7 +636,8 @@ function checkPiece(r,c,piece,color){
     /*
     TO DO
     LOGIC:
-    Piece can't be selected IF blocked OR will lead to a check of KING
+    Piece can't be selected IF blocked OR will lead to a check of KING [x]
+    additional to do: add checking of piece that can remove check
      */
     const multiplier = (color == 'black') ? -1:1;
     let colorCont, colorFlag;
@@ -708,15 +776,16 @@ function checkPiece(r,c,piece,color){
         if(ifront){
             const frontPiece = document.getElementsByClassName("box r"+ ifront +" c" + c);
             if (frontPiece[0].innerHTML == KING && frontPiece[0].style.color == color){
-                // do check on the back to see if enemy rook or queen is present, if yes, return false
+                // do check on the back to see if enemy rook or queen is present, if yes then check if piece can capture, return false
                 for(let x = r - 1; x >= 1; x--){
                     const cPiece = document.getElementsByClassName("box r"+ x + " c" + c);
-                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == ROOK || cPiece[0].innerHTML == QUEEN)){
+                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == ROOK || cPiece[0].innerHTML == QUEEN) && !(piece == ROOK || piece == QUEEN)){
                         return false;
                     }
                 }
             }
             ifront = (ifront + 1) <= 8? (ifront+1):null;
+            if(frontPiece[0].innerHTML != ''){ifront = null;}
         }
         if(iback){
              const backPiece = document.getElementsByClassName("box r"+ iback +" c" + c);
@@ -724,12 +793,13 @@ function checkPiece(r,c,piece,color){
                 // do check on the front to see if enemy rook or queen is present, if yes, return false
                 for(let x = r + 1; x <= 8; x++){
                     const cPiece = document.getElementsByClassName("box r"+ x + " c" + c);
-                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == ROOK || cPiece[0].innerHTML == QUEEN)){
+                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == ROOK || cPiece[0].innerHTML == QUEEN)&& !(piece == ROOK || piece == QUEEN)){
                         return false;
                     }
                 }
             }
             iback = (iback - 1) >= 1? (iback-1):null;
+            if(backPiece[0].innerHTML != ''){iback = null;}
         }
         if(jfront){ 
             const rightPiece = document.getElementsByClassName("box r"+ r +" c" + jfront);
@@ -737,12 +807,13 @@ function checkPiece(r,c,piece,color){
                 // do check on the left to see if enemy rook or queen is present, if yes, return false
                 for(let x = c - 1; x >= 1; x--){
                     const cPiece = document.getElementsByClassName("box r"+ r + " c" + x);
-                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == ROOK || cPiece[0].innerHTML == QUEEN)){
+                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == ROOK || cPiece[0].innerHTML == QUEEN)&& !(piece == ROOK || piece == QUEEN)){
                         return false;
                     }
                 }
             }
             jfront = (jfront + 1) <= 8? (jfront+1):null;
+            if(rightPiece[0].innerHTML != ''){jfront = null;}
         }
         if(jback){ 
             const leftPiece = document.getElementsByClassName("box r"+ r +" c" + jback);
@@ -750,12 +821,13 @@ function checkPiece(r,c,piece,color){
                 // do check on the right to see if enemy rook or queen is present, if yes, return false
                 for(let x = c + 1; x <= 8; x++){
                     const cPiece = document.getElementsByClassName("box r"+ r + " c" + x);
-                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == ROOK || cPiece[0].innerHTML == QUEEN)){
+                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == ROOK || cPiece[0].innerHTML == QUEEN)&& !(piece == ROOK || piece == QUEEN)){
                         return false;
                     }
                 }
             }
             jback = (jback - 1) >= 1? (jback-1):null;
+            if(leftPiece[0].innerHTML != ''){jback = null;}
         }
         if(diag1[0] && diag1[1]){
             const diagPiece1 = document.getElementsByClassName("box r"+ diag1[0] +" c" + diag1[1]);
@@ -763,12 +835,13 @@ function checkPiece(r,c,piece,color){
                 // do check on the opposite diagonal to see if enemy bishop or queen is present, if yes, return false
                 for(let x = r - 1, y = c - 1; x >= 1 && y >= 1; x--, y--){
                     const cPiece = document.getElementsByClassName("box r"+ x + " c" + y);
-                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)){
+                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN)){
                         return false;
                     }
                 }
             }
-            diag1 = [ifront, jfront];
+            diag1 = [(diag1[0] + 1) <= 8? (diag1[0] + 1):null , (diag1[1] + 1) <= 8? (diag1[1] + 1):null];
+            if(diagPiece1[0].innerHTML != ''){diag1 = [null,null];}
         }
         if(diag2[0] && diag2[1]){
             const diagPiece2 = document.getElementsByClassName("box r"+ diag2[0] +" c" + diag2[1]);
@@ -776,12 +849,13 @@ function checkPiece(r,c,piece,color){
                 // do check on the opposite diagonal to see if enemy bishop or queen is present, if yes, return false
                 for(let x = r - 1, y = c + 1; x >= 1 && y <= 8; x--, y++){
                     const cPiece = document.getElementsByClassName("box r"+ x + " c" + y);
-                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)){
+                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN)){
                         return false;
                     }
                 }
             }
-            diag2 = [ifront, jback];
+            diag2 = [(diag2[0] + 1) <= 8? (diag2[0] + 1):null , (diag2[1] - 1) >= 1? (diag2[1] - 1):null];
+            if(diagPiece2[0].innerHTML != ''){diag2 = [null,null];}
         }
         if(diag3[0] && diag3[1]){
             const diagPiece3 = document.getElementsByClassName("box r"+ diag3[0] +" c" + diag3[1]);
@@ -789,12 +863,13 @@ function checkPiece(r,c,piece,color){
                 // do check on the opposite diagonal to see if enemy bishop or queen is present, if yes, return false
                 for(let x = r + 1, y = c - 1; x <= 8 && y >= 1; x++, y--){
                     const cPiece = document.getElementsByClassName("box r"+ x + " c" + y);
-                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)){
+                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN)){
                         return false;
                     }
                 }
             }
-            diag3 = [iback, jfront];
+            diag3 = [(diag3[0] - 1) >= 1? (diag3[0] - 1):null , (diag3[1] + 1) <= 8? (diag3[1] + 1):null];
+            if(diagPiece3[0].innerHTML != ''){diag3 = [null,null];}
         }
         if(diag4[0] && diag4[1]){
             const diagPiece4 = document.getElementsByClassName("box r"+ diag4[0] +" c" + diag4[1]);
@@ -802,15 +877,15 @@ function checkPiece(r,c,piece,color){
                 // do check on the opposite diagonal to see if enemy bishop or queen is present, if yes, return false
                 for(let x = r + 1, y = c + 1; x <= 8 && y <= 8; x++, y++){
                     const cPiece = document.getElementsByClassName("box r"+ x + " c" + y);
-                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)){
+                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& (piece != BISHOP || piece != QUEEN)){
                         return false;
                     }
                 }
             }
-            diag4 = [iback, jback];
+            diag4 = [(diag4[0] - 1) >= 1? (diag4[0] - 1):null , (diag4[1] - 1) >= 1? (diag4[1] - 1):null];
+            if(diagPiece4[0].innerHTML != ''){diag4 = [null,null];}
         }
     }
-
     return true;
 }
 
