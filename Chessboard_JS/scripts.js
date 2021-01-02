@@ -2,9 +2,9 @@
 General TODO:
 1. Alternating moves [x]
 2. Move and Move Checking [x]
-3. Piece Checking [done with Pawn and check, to follow next]
+3. Piece Checking [x]
 4. Victory Condition - Checkmate and Timer running out [check started][timer Check done]
-5. En passant [done] /Castling [done]
+5. En passant [x] /Castling [x]
 6. Timers [x]
 7. Pawn promotion
 8. *OPTIONAL* - add logging
@@ -670,8 +670,8 @@ function checkPiece(r,c,piece,color){
                 const bottomPiece = document.getElementsByClassName("box r"+ (r-1) +" c" + (c+1) );
                 colorCont.push(bottomPiece[0].style.color);
             }
-            if(c + 1 <= 8 && r - 1 >= 1){
-                const rightPiece = document.getElementsByClassName("box r"+ (r-1) +" c" + (c + 1) );
+            if(c - 1 >= 1 && r + 1 <= 8){
+                const rightPiece = document.getElementsByClassName("box r"+ (r+1) +" c" + (c - 1) );
                 colorCont.push(rightPiece[0].style.color);
             }
             if(c - 1 >= 1 && r - 1 >= 1 ){

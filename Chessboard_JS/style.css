@@ -18,7 +18,7 @@ body {
 }
 
 .box{
-	font-size: calc(10vh);
+	font-size: calc(8vh);
     background-color: grey;
     display: flex;
     align-items: center;
@@ -111,9 +111,13 @@ div#footnote{
     text-align: center;
     background: none;
     font-size:1.5vh;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
 }
 .description, [class*="timer"]{
     text-align: center;
+    font-size: 3vh;
 }
 
 .valid{
@@ -121,15 +125,15 @@ div#footnote{
 }
 @keyframes highlight{
     0%{
-        font-size:calc(10vh);
+        font-size:calc(8vh);
         z-index: 1;
     }
     50%{
-        font-size:calc(12.5vh);
+        font-size:calc(10vh);
         z-index: 100;
     }
     100%{
-        font-size:calc(10vh);
+        font-size:calc(8vh);
         z-index: 1;
     }
 }
