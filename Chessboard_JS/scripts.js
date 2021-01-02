@@ -6,7 +6,7 @@ General TODO:
 4. Victory Condition - Checkmate and Timer running out [check started][timer Check done]
     Tasks: 
     -finish isCheck() function 
-    -make a function to count available piece for movement
+    -make a function to count available piece for movement [done]
 5. En passant [x] /Castling [x]
 6. Timers [x]
 7. Pawn promotion [x]
@@ -119,7 +119,7 @@ function removePieces(){
     1. DO logic for clicking if clickingPiece = true [done]
     2. DO logic for dropping if clickingPiece = false [done]
     3. if clickingPiece = true, the only way to set it to false is to click a valid 'box' which will be checked by checkMove() [done]
-    4. if clickingPiece = false, the only way to set it to false is to click a valid 'piece' that can move which will be checked by checkPiece()
+    4. if clickingPiece = false, the only way to set it to false is to click a valid 'piece' that can move which will be checked by checkPiece() [done]
 */
 function movePieces(r,c){
     let piece = document.getElementsByClassName("box r"+ r +" c" + c );
@@ -181,27 +181,50 @@ function movePieces(r,c){
                     clearID();
                 }
             }
+            /* Victory Checking
+            Logic: 
+                Checkmate:
+                -if isCheck() && whiteMove && !stillCanMove()  => Black Wins -> moved to movePieces()
+                -if isCheck() && !whiteMove && !stillCanMove() => White Wins -> moved to movePieces()
+                -if !isCheck() && !stillCanMove() => Stalemate -> moved to movePieces()
+            */
             if(whiteMove){
                 blackInt = setInterval(timerBlack, 1000);
                 clearInterval(whiteInt);
-                whiteMove = false;
                 if(isCheck(piece[0])){
                     DESC[0].innerHTML = "Black Move - Check";
+                    if (!stillCanMove()){
+                        alert('Black Victory!');
+                        putChessPieces();
+                    }
                 }
                 else{
                     DESC[0].innerHTML = "Black Move";
+                    if(!stillCanMove()){
+                        alert("Stalemate!");
+                        putChessPieces();
+                    }
                 }
+                whiteMove = false;
             }
             else{
                 whiteInt = setInterval(timerWhite, 1000);
                 clearInterval(blackInt);
-                whiteMove = true;
                 if(isCheck(piece[0])){
                     DESC[0].innerHTML = "White Move - Check";
+                    if(!stillCanMove()){
+                        alert('White Victory!');
+                        putChessPieces();
+                    }
                 }
                 else{
                     DESC[0].innerHTML = "White Move";
+                    if(!stillCanMove()){
+                        alert("Stalemate!");
+                        putChessPieces();
+                    }
                 }
+                whiteMove = true;
             }
             
         }
@@ -253,13 +276,7 @@ function isCheck(piece){
     return false;
 }
 
-/* Victory Checking function 
-    Logic: 
-        Checkmate:
-            -if isCheck() && whiteMove and # of available moves = 0  => Black Wins
-            -if isCheck() && !whiteMove and # of available moves = 0 => White Wins
-            -if !isCheck() and # of available moves = 0 => Stalemate
-*/
+/* Timer Victory */
 function checkVictory(){
     if (wTime <= 0){
         alert('Black Victory!');
@@ -270,9 +287,32 @@ function checkVictory(){
         alert('White Victory!');
         putChessPieces();
     }
-    
+
 }
 
+/* Will check if there are still available moves */
+function stillCanMove(){
+    let container = [];
+    if(whiteMove){
+        for(let i = 0; i < BOX.length;i++){
+            if(BOX[i].style.color == 'white') container.push(BOX[i]);
+        }
+    }
+    else{
+        for(let i = 0; i < BOX.length;i++){
+            if(BOX[i].style.color == 'black') container.push(BOX[i]);
+        }
+    }
+    for(let i = 0; i < container.length; i++){
+        let r = container[i].className[5];
+        let c = container[i].className[8];
+        if(checkPiece(r,c,container[i].innerHTML,container[i].style.color)){
+            return true;
+        }
+    }
+    return false;
+
+}
 
 /*
 validate if valid move
@@ -885,6 +925,12 @@ function checkPiece(r,c,piece,color){
             diag4 = [(diag4[0] - 1) >= 1? (diag4[0] - 1):null , (diag4[1] - 1) >= 1? (diag4[1] - 1):null];
             if(diagPiece4[0].innerHTML != ''){diag4 = [null,null];}
         }
+    }
+    if(isCheck()){
+        /*TO DO
+        Logic:
+        if Check, piece that can only move are piece that can capture the check or can block the check or KING
+         */
     }
     return true;
 }
