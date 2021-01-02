@@ -173,7 +173,7 @@ function movePieces(r,c){
 
     else if(!clickingPiece){
         //checks if there's a piece and if the piece can move
-        if(piece[0].innerHTML != '' && colorToMove == piece[0].style.color && checkPiece(r,c,piece) && ((isChecked && piece[0].innerHTML==KING) || !isChecked)){
+        if(piece[0].innerHTML != '' && colorToMove == piece[0].style.color && checkPiece(r,c,piece[0].innerHTML,piece[0].style.color) && ((isChecked && piece[0].innerHTML==KING) || !isChecked)){
             console.log("pick up a piece");
             piece[0].style.animation = "highlight 1.5s infinite";
             holdingPiece = piece[0].innerHTML;
@@ -565,15 +565,15 @@ function displayMove(r,c,piece){
     //TO DO
 }
 //validate if valid piece to move (i.e. not being blocked by allies or will not lead to a check)
-function checkPiece(r,c,piece){
+function checkPiece(r,c,piece,color){
     /*
     TO DO
     LOGIC:
     Piece can't be selected IF blocked OR will lead to a check of KING
      */
-    const color = piece[0].style.color;
     const multiplier = (color == 'black') ? -1:1;
-    switch(piece[0].innerHTML){
+    let colorCont, colorFlag;
+    switch(piece){
         case PAWN:
             // blocked case
             const front = document.getElementsByClassName("box r"+ (r-multiplier) +" c" + c );
@@ -583,19 +583,115 @@ function checkPiece(r,c,piece){
             break;
         case ROOK:
             // blocked case
+            colorCont = [];
+            colorFlag = false;
+            if(r + 1 <= 8){
+                const topPiece = document.getElementsByClassName("box r"+ (r+1) +" c" + c );
+                colorCont.push(topPiece[0].style.color);
+            }
+            if(r - 1 >= 1){
+                const bottomPiece = document.getElementsByClassName("box r"+ (r-1) +" c" + c );
+                colorCont.push(bottomPiece[0].style.color);
+            }
+            if(c + 1 <= 8){
+                const rightPiece = document.getElementsByClassName("box r"+ r +" c" + (c + 1) );
+                colorCont.push(rightPiece[0].style.color);
+            }
+            if(c - 1 >= 1){
+                const leftPiece = document.getElementsByClassName("box r"+ r +" c" + (c - 1) );
+                colorCont.push(leftPiece[0].style.color);
+            }
+            for (let i = 0; i < colorCont.length; i++){
+                if(colorCont[i] != color){
+                    colorFlag = true;
+                }
+            }
+            if(!colorFlag){
+                return colorFlag;
+            }
+
+
             break;
         case KNIGHT:
             // blocked case
+            colorCont = [];
+            colorFlag = false;
+            if(r + 2 <= 8 && c+1 <=8){
+                const piece1 = document.getElementsByClassName("box r"+ (r+2) +" c" + (c+1) );
+                colorCont.push(piece1[0].style.color);
+            }
+            if(r + 2 <= 8 && c-1 >=8){
+                const piece2 = document.getElementsByClassName("box r"+ (r+2) +" c" + (c-1) );
+                colorCont.push(piece2[0].style.color);
+            }
+            if(r + 1 <= 8 && c+2 <=8){
+                const piece3 = document.getElementsByClassName("box r"+ (r+1) +" c" + (c+2) );
+                colorCont.push(piece3[0].style.color);
+            }
+            if(r + 1 <= 8 && c-2 >=1){
+                const piece4 = document.getElementsByClassName("box r"+ (r+1) +" c" + (c-2) );
+                colorCont.push(piece4[0].style.color);
+            }
+            if(r - 1 >= 1 && c+2 <=8){
+                const piece5 = document.getElementsByClassName("box r"+ (r-1) +" c" + (c+2) );
+                colorCont.push(piece5[0].style.color);
+            }
+            if(r - 1 >= 1 && c-2 >=1){
+                const piece6 = document.getElementsByClassName("box r"+ (r-1) +" c" + (c-2) );
+                colorCont.push(piece6[0].style.color);
+            }
+            if(r - 2 >= 1 && c+1 <=8){
+                const piece7 = document.getElementsByClassName("box r"+ (r-2) +" c" + (c+1) );
+                colorCont.push(piece7[0].style.color);
+            }
+            if(r - 2 >= 1 && c-1 >=1){
+                const piece8 = document.getElementsByClassName("box r"+ (r-2) +" c" + (c-1) );
+                colorCont.push(piece8[0].style.color);
+            }
+            for (let i = 0; i < colorCont.length; i++){
+                if(colorCont[i] != color){
+                    colorFlag = true;
+                }
+            }
+
+            if(!colorFlag){
+                return colorFlag;
+            }
             break;
         case BISHOP:
             // blocked case
+            colorCont = [];
+            colorFlag = false;
+            if(r + 1 <= 8 && c+1 <=8){
+                const topPiece = document.getElementsByClassName("box r"+ (r+1) +" c" + (c+1) );
+                colorCont.push(topPiece[0].style.color);
+            }
+            if(r - 1 >= 1 && c+1 <=8){
+                const bottomPiece = document.getElementsByClassName("box r"+ (r-1) +" c" + (c+1) );
+                colorCont.push(bottomPiece[0].style.color);
+            }
+            if(c + 1 <= 8 && r - 1 >= 1){
+                const rightPiece = document.getElementsByClassName("box r"+ (r-1) +" c" + (c + 1) );
+                colorCont.push(rightPiece[0].style.color);
+            }
+            if(c - 1 >= 1 && r - 1 >= 1 ){
+                const leftPiece = document.getElementsByClassName("box r"+ (r-1) +" c" + (c - 1) );
+                colorCont.push(leftPiece[0].style.color);
+            }
+            for (let i = 0; i < colorCont.length; i++){
+                if(colorCont[i] != color){
+                    colorFlag = true;
+                }
+            }
+            if(!colorFlag){
+                return colorFlag;
+            }
             break;
         case KING:
             // blocked case
-            break;
+            return (checkPiece(r,c,ROOK,color) || checkPiece(r,c,BISHOP,color));
         case QUEEN:
-            // blocked case
-            break;
+            return (checkPiece(r,c,ROOK,color) || checkPiece(r,c,BISHOP,color));
     }
     // check case
     // row and column scanners
