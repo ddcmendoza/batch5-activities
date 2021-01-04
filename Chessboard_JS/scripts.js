@@ -203,13 +203,11 @@ function movePieces(r,c){
             if(whiteMove){
                 blackInt = setInterval(timerBlack, 1000);
                 clearInterval(whiteInt);
-                
                 whiteMove = false;
             }
             else{
                 whiteInt = setInterval(timerWhite, 1000);
                 clearInterval(blackInt);
-                
                 whiteMove = true;
             }
         }
@@ -445,7 +443,6 @@ function stillCanMove(){
     for(let i = 0; i < container.length; i++){
         let r = container[i].className[5];
         let c = container[i].className[8];
-        console.log(getBox(r,c)[0].innerHTML);
         if(checkPiece(r,c,container[i].innerHTML,container[i].style.color)){
             return true;
         }
@@ -551,10 +548,6 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
                 if(rdiff != 0)  i = prevR + rdiff/(curR-prevR);
                 else i = prevR;
                 // check the path if it's being blocked
-                console.log(i);
-                console.log(prevR);
-                console.log(rdiff);
-                console.log(curR-prevR);
                 while(i != curR){
                     let cPiece = document.getElementsByClassName("box r"+ i +" c" + curC );
                     if (cPiece[0].innerHTML != '') return false;
@@ -1333,7 +1326,6 @@ function getMoves(r,c,piece,color){
         case QUEEN:
             return intersection(getMoves(r,c,ROOK,color),getMoves(r,c,BISHOP,color));
     }
-    console.log(res);
     return res;
 }
 // a isIn b? example usage: [1,2] in [[1,2],[3,4]]? ==> true ==> isIn([1,2],[[1,2],[3,4]]) = true
