@@ -620,7 +620,7 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
             break;
         case KING:
             // will refactor castling later
-            if (prevC - curC == 2 && prevR == curR){
+            if (prevC - curC == 2 && prevR == curR && !isChecked && !willBeChecked(curR,2,color) && !willBeChecked(curR,3,color) && !willBeChecked(curR,4,color)){
                 // left castling
                 let bet1 = document.getElementsByClassName("box r"+ curR +" c" + 2);
                 let bet2 = document.getElementsByClassName("box r"+ curR +" c" + 3);
@@ -657,7 +657,7 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
                     return res;
                 }
             }
-            else if(prevC - curC == -2 && prevR == curR){
+            else if(prevC - curC == -2 && prevR == curR && !isChecked && !willBeChecked(curR, 6, color) && !willBeChecked(curR, 7, color)){
                 //right castling
                 let bet1 = document.getElementsByClassName("box r"+ curR +" c" + 6);
                 let bet2 = document.getElementsByClassName("box r"+ curR +" c" + 7);
