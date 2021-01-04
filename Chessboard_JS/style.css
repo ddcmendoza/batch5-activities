@@ -137,3 +137,11 @@ div#footnote{
         z-index: 1;
     }
 }
+#checked{
+    box-shadow: 0 0 1vh red;
+    z-index: 100;
+}
+#valid{
+    box-shadow: 0 0 1vh yellow;
+    z-index: 100;
+}

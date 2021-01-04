@@ -93,10 +93,17 @@ function putChessPieces() {
      }
 }
 // function for clearing id of box
-function clearID(){
+function clearID(forEnPassant = true){
     for(let i = 0; i < BOX.length;i++){
-        BOX[i].id = '';
+        if(forEnPassant){
+            BOX[i].id = '';
+        }
+        else{
+            if(BOX[i].id != 'enPassant') BOX[i].id = '';
+        }
+        
     }
+
 }
 
 //function for clearing the board
@@ -224,11 +231,14 @@ function movePieces(r,c){
         holdingR = null;
         holdingC = null;
         console.log("drop piece")
+        clearID(false);
         if(!isChecked) checker = piece;
         if(!whiteMove){
             if(isCheck(piece[0].innerHTML,r,c,piece[0].style.color)){
                 DESC[0].innerHTML = "Black Move - Check";
                 isChecked = true;
+                let box = getBox(blackKing[0], blackKing[1])[0];
+                box.id = 'checked';
                 if (!stillCanMove()){
                     alert('White Victory!');
                     putChessPieces();
@@ -246,6 +256,8 @@ function movePieces(r,c){
             if(isCheck(piece[0].innerHTML,r,c,piece[0].style.color)){
                 DESC[0].innerHTML = "White Move - Check";
                 isChecked = true;
+                let box = getBox(whiteKing[0], whiteKing[1])[0];
+                box.id = 'checked';
                 if(!stillCanMove()){
                     alert('Black Victory!');
                     putChessPieces();
@@ -274,7 +286,7 @@ function movePieces(r,c){
             clickingPiece = true;
             holdingR = r;
             holdingC = c;
-            //displayMove(r,c,holdingPiece); for future
+            displayMove(r,c,holdingPiece,colorToMove); 
         }
     }
 }
@@ -845,8 +857,14 @@ function willBeChecked(R,C,color){
     return false;
 }
 //TO DO: will highlight valid moves, then put valid class to the valid elements
-function displayMove(r,c,piece){
-    //TO DO
+function displayMove(r,c,piece,color){
+    let moves = getMoves(r,c,piece,color);
+    for(let i = 0; i < moves.length; i++){
+        let box = getBox(moves[i][0],moves[i][1])[0];
+        box.id = 'valid';
+    }
+    //console.log(moves);
+    //TO DO [done]
 }
 //validate if valid piece to move (i.e. not being blocked by allies or will not lead to a check)
 function checkPiece(r,c,piece,color){
@@ -1252,24 +1270,36 @@ function getMoves(r,c,piece,color){
         case ROOK:
             while(ifront||jfront||iback||jback){
                 if(ifront){
-                    if(getBox(ifront,c)[0].color != color) res.push([ifront,c]);
-                    else ifront = null;
-                    ifront = (ifront + 1) <= 8? (ifront+1):null;
+                    if(getBox(ifront,c)[0].style.color != color) {
+                        res.push([ifront,c]);
+                        if(getBox(ifront,c)[0].innerHTML != '') ifront = null;
+                        if(ifront) ifront = (ifront + 1) <= 8? (ifront+1):null;
+                    }
+                    else {ifront = null;}
                 }
                 if(jfront){
-                    if(getBox(r,jfront)[0].color != color) res.push([r,jfront]);
-                    else jfront = null;
-                    jfront = (jfront + 1) <= 8? (jfront+1):null;
+                    if(getBox(r,jfront)[0].style.color != color) {
+                        res.push([r,jfront]);
+                        if(getBox(r,jfront)[0].innerHTML != '') jfront = null;
+                        if(jfront) jfront = (jfront + 1) <= 8? (jfront+1):null;
+                    }
+                    else {jfront = null;}
                 }
                 if(iback){
-                    if(getBox(iback,c)[0].color != color) res.push([iback,c]);
-                    else iback = null;
-                    iback = (iback - 1) >= 1? (iback-1):null;
+                    if(getBox(iback,c)[0].style.color != color) {
+                        res.push([iback,c]);
+                        if(getBox(iback,c)[0].innerHTML != '') iback = null;
+                        if(iback) iback = (iback - 1) >= 1? (iback-1):null;
+                    }
+                    else {iback = null;}
                 }
                 if(jback){
-                    if(getBox(r,jback)[0].color != color) res.push([r,jback]);
-                    else jback = null;
-                    jback = (jback - 1) >= 1? (jback-1):null;
+                    if(getBox(r,jback)[0].style.color != color) {
+                        res.push([r,jback]);
+                        if(getBox(r,jback)[0].innerHTML != '') jback = null;
+                        if(jback) jback = (jback - 1) >= 1? (jback-1):null;
+                    }
+                    else {jback = null;}
                 }
             }
             break;
@@ -1302,30 +1332,43 @@ function getMoves(r,c,piece,color){
         case BISHOP:
             while((diag1[0] && diag1[1]) || (diag2[0] && diag2[1]) || (diag3[0] && diag3[1]) || (diag4[0] && diag4[1])){
                 if(diag1[0] && diag1[1]){
-                    if(getBox(diag1[0],diag1[1])[0].color != color) res.push(diag1);
+                    if(getBox(diag1[0],diag1[1])[0].style.color != color) {
+                        res.push(diag1);
+                        if(getBox(diag1[0],diag1[1])[0].innerHTML != '') diag1 = [null, null];
+                        if(diag1[0] && diag1[1]) diag1 = [(diag1[0] + 1) <= 8? (diag1[0] + 1):null , (diag1[1] + 1) <= 8? (diag1[1] + 1):null];
+                    }
                     else diag1 = [null,null];
-                    diag1 = [(diag1[0] + 1) <= 8? (diag1[0] + 1):null , (diag1[1] + 1) <= 8? (diag1[1] + 1):null];
                 }
                 if(diag2[0] && diag2[1]){
-                    if(getBox(diag2[0],diag2[1])[0].color != color) res.push(diag2);
+                    if(getBox(diag2[0],diag2[1])[0].style.color != color) {
+                        res.push(diag2);
+                        if(getBox(diag2[0],diag2[1])[0].innerHTML != '') diag2 = [null, null];
+                        if(diag2[0] && diag2[1]) diag2 = [(diag2[0] + 1) <= 8? (diag2[0] + 1):null , (diag2[1] - 1) >= 1? (diag2[1] - 1):null];
+                    }
                     else diag2 = [null,null];
-                    diag2 = [(diag2[0] + 1) <= 8? (diag2[0] + 1):null , (diag2[1] - 1) >= 1? (diag2[1] - 1):null];
                 }
                 if(diag3[0] && diag3[1]){
-                    if(getBox(diag3[0],diag3[1])[0].color != color) res.push(diag3);
+                    if(getBox(diag3[0],diag3[1])[0].style.color != color) {
+                        res.push(diag3);
+                        if(getBox(diag3[0],diag3[1])[0].innerHTML != '') diag3 = [null, null];
+                        if(diag3[0] && diag3[1]) diag3 = [(diag3[0] - 1) >= 1? (diag3[0] - 1):null , (diag3[1] + 1) <= 8? (diag3[1] + 1):null];
+                    }
                     else diag3 = [null,null];
-                    diag3 = [(diag3[0] - 1) >= 1? (diag3[0] - 1):null , (diag3[1] + 1) <= 8? (diag3[1] + 1):null];
                 }
                 if(diag4[0] && diag4[1]){
-                    if(getBox(diag4[0],diag4[1])[0].color != color) res.push(diag4);
+                    if(getBox(diag4[0],diag4[1])[0].style.color != color) {
+                        res.push(diag4);
+                        if(getBox(diag4[0],diag4[1])[0].innerHTML != '') diag4 = [null, null];
+                        if(diag4[0] && diag4[1]) diag4 = [(diag4[0] - 1) >= 1? (diag4[0] - 1):null , (diag4[1] - 1) >= 1? (diag4[1] - 1):null];
+                    }
                     else diag4 = [null,null];
-                    diag4 = [(diag4[0] - 1) >= 1? (diag4[0] - 1):null , (diag4[1] - 1) >= 1? (diag4[1] - 1):null];
                 }
             }
             break;
         case QUEEN:
-            return intersection(getMoves(r,c,ROOK,color),getMoves(r,c,BISHOP,color));
+            return union(getMoves(r,c,ROOK,color),getMoves(r,c,BISHOP,color));
     }
+    //console.log(res);
     return res;
 }
 // a isIn b? example usage: [1,2] in [[1,2],[3,4]]? ==> true ==> isIn([1,2],[[1,2],[3,4]]) = true
