@@ -133,6 +133,7 @@ function movePieces(r,c){
     let piece = document.getElementsByClassName("box r"+ r +" c" + c );
     let colorToMove = whiteMove? 'white':'black';
     piece[0].style.animation = '';
+
     if(clickingPiece){
         //check if move is possible
         if(checkMove(r,c,holdingR,holdingC,holdingPiece,holdingPieceColor,piece) && piece[0].style.color != containerPiece.style.color){
@@ -466,6 +467,35 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
     const curPiece = piece[0].innerHTML;
     const rdiff = Math.abs(prevR-curR);
     const cdiff = Math.abs(prevC-curC);
+    if(isChecked && holdPiece != KING){
+        let dangerR,dangerC;
+    // identify where the king and aggressor is
+        if(whiteMove){
+            dangerR = whiteKing[0];
+            dangerC = whiteKing[1];
+        }
+        else{
+            dangerR = blackKing[0];
+            dangerC = blackKing[1];
+        }
+
+        let aggresorR = checker[0].className[5];
+        let aggresorC = checker[0].className[8];
+        let path = [[aggresorR,aggresorC]]; //path from aggresor to checked king
+
+        let rd = aggresorR - dangerR;
+        let cd = aggresorC - dangerC;
+        let i = aggresorR - rd/Math.abs(rd);
+        let j = aggresorC - cd/Math.abs(cd);
+        while (i != dangerR && j != dangerC){
+            if (getBox(aggresorR,aggresorC)[0].innerHTML == KNIGHT || getBox(aggresorR,aggresorC)[0].innerHTML == PAWN) break; // aggressor is pawn or knight path is only to capture
+            path.push([i,j]);
+            i = i - rd/Math.abs(rd);
+            j = j - cd/Math.abs(cd);
+        }
+        if(!isIn([curR,curC],path)) return false;
+
+    }
     switch(holdPiece){
         case PAWN:
             // lol definitely will change later, but good for now 12/20/2020
@@ -797,17 +827,25 @@ function willBeChecked(R,C,color){
     /*for PAWN check TODO */
     if (whiteMove){
         //if white needs to be careful on pawn in front (i.e. row is lower)
-        const cPiece1 = document.getElementsByClassName("box r"+ (R-1) +" c" + (C-1));
-        const cPiece2 = document.getElementsByClassName("box r"+ (R-1) +" c" + (C+1));
-        if(cPiece1[0].style.color != color && cPiece1[0].innerHTML == PAWN) {return true;}
-        if(cPiece2[0].style.color != color && cPiece2[0].innerHTML == PAWN) {return true;}
+        if(R-1 >= 1 && C-1 >=1){
+            const cPiece1 = document.getElementsByClassName("box r"+ (R-1) +" c" + (C-1));
+            if(cPiece1[0].style.color != color && cPiece1[0].innerHTML == PAWN) {return true;}
+        }
+        if(R-1 >= 1 && C+1 <= 8){
+            const cPiece2 = document.getElementsByClassName("box r"+ (R-1) +" c" + (C+1));
+            if(cPiece2[0].style.color != color && cPiece2[0].innerHTML == PAWN) {return true;}
+        }
     }
     else{
         //if black needs to be careful on pawn in back (i.e. row is higher)
-        const cPiece1 = document.getElementsByClassName("box r"+ (R+1) +" c" + (C-1));
-        const cPiece2 = document.getElementsByClassName("box r"+ (R+1) +" c" + (C+1));
-        if(cPiece1[0].style.color != color && cPiece1[0].innerHTML == PAWN) {return true;}
-        if(cPiece2[0].style.color != color && cPiece2[0].innerHTML == PAWN) {return true;}
+        if(R+1 <= 8 && C-1 >=1){
+            const cPiece1 = document.getElementsByClassName("box r"+ (R+1) +" c" + (C-1));
+            if(cPiece1[0].style.color != color && cPiece1[0].innerHTML == PAWN) {return true;}
+        }
+        if(R+1 <= 8 && C+1 <= 8){
+            const cPiece2 = document.getElementsByClassName("box r"+ (R+1) +" c" + (C+1));
+            if(cPiece2[0].style.color != color && cPiece2[0].innerHTML == PAWN) {return true;}
+        }
 
     }
 
@@ -1195,10 +1233,10 @@ function getMoves(r,c,piece,color){
                     if(getBox(r-2,c)[0].innerHTML =='') res.push([r-2,c]);
                 }
                 if(c != 1){
-                    if(getBox(r-1,c-1)[0].style.color != color) res.push([r-1,c-1]);
+                    if(getBox(r-1,c-1)[0].style.color != color && getBox(r-1,c-1)[0].innerHTML != '') res.push([r-1,c-1]);
                 }
                 if(c != 8){
-                    if(getBox(r-1,c+1)[0].style.color != color) res.push([r-1,c+1]);
+                    if(getBox(r-1,c+1)[0].style.color != color && getBox(r-1,c+1)[0].innerHTML != '') res.push([r-1,c+1]);
                 }
 
             }
@@ -1211,10 +1249,10 @@ function getMoves(r,c,piece,color){
                     if(getBox(r+2,c)[0].innerHTML =='') res.push([r+2,c]);
                 }
                 if(c != 1){
-                    if(getBox(r+1,c-1)[0].style.color != color) res.push([r+1,c-1]);
+                    if(getBox(r+1,c-1)[0].style.color != color  && getBox(r+1,c-1)[0].innerHTML != '') res.push([r+1,c-1]);
                 }
                 if(c != 8){
-                    if(getBox(r+1,c+1)[0].style.color != color) res.push([r+1,c+1]);
+                    if(getBox(r+1,c+1)[0].style.color != color  && getBox(r+1,c+1)[0].innerHTML != '') res.push([r+1,c+1]);
                 }
             }
             break;
