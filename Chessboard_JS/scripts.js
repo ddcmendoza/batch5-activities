@@ -1367,6 +1367,40 @@ function getMoves(r,c,piece,color){
             break;
         case QUEEN:
             return union(getMoves(r,c,ROOK,color),getMoves(r,c,BISHOP,color));
+        case KING:
+            if(r+1 <= 8){
+                let box1 = getBox(r+1,c);
+                if (box1[0].style.color != color) res.push([r+1,c]);
+            }
+            if(r-1 >= 1){
+                let box2 = getBox(r-1,c);
+                if (box2[0].style.color != color) res.push([r-1,c]);
+            }
+            if(c+1 <= 8){
+                let box3 = getBox(r,c+1);
+                if (box3[0].style.color != color) res.push([r,c+1]);
+            }
+            if(c-1 >= 1){
+                let box4 = getBox(r,c-1);
+                if (box4[0].style.color != color) res.push([r,c-1]);
+            }
+            if(r+1 <= 8 && c+1 <= 8){
+                let box5 = getBox(r+1,c+1);
+                if (box5[0].style.color != color) res.push([r+1,c+1]);
+            }
+            if(r+1 <= 8 && c-1 >= 1){
+                let box6 = getBox(r+1,c-1);
+                if (box6[0].style.color != color) res.push([r+1,c-1]);
+            }
+            if(r-1 >= 1 && c+1 <= 8){
+                let box7 = getBox(r-1,c+1);
+                if (box7[0].style.color != color) res.push([r-1,c+1]);
+            }
+            if(r-1 >= 1 && c-1 >= 1){
+                let box8 = getBox(r-1,c-1);
+                if (box8[0].style.color != color) res.push([r-1,c-1]);
+            }
+            break;
     }
     //console.log(res);
     return res;
