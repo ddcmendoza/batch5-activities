@@ -1,17 +1,37 @@
 // Dave Mendoza
+
+/*
+Using code from the previous Playing Cards activity:
+1. Implement a "Deal Card" button where it pops a card from the deck and shows its name and symbol. This button must disable according to the cards 
+2. left in the deck.
+3. Implement a "Remaining Cards" view where it should see the number of remaining cards in the deck
+4. Implement a "Draw History" function where you can see the history of the cards dealt
+5. Implement "Previous" and "Next" buttons. That will show the past cards dealt. These buttons must enabled according to the draw history's length
+6. Implement a "Reshuffle Deck" button that would reshuffle the deck and reset the history.
+The design and representation and responsiveness of the cards in the DOM is up to your creativity and imagination. 
+You may use array built-in methods.
+Bonus
+After a shuffle, loop your deck by dealing five cards until the deck is exhausted. On each deal, print what kind of poker hand is dealt! https://en.wikipedia.org/wiki/List_of_poker_hands
+*/
 const deckBar = document.getElementsByClassName("deck");
 const handBar = document.getElementsByClassName("cards-list");
+const currentHand = document.getElementsByClassName("hand");
+const view = document.getElementsByClassName("view");
 const SUITS = ['♠','♥','♦','♣'];
 const RANK = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
 var deck = [];
 var hand = [];
+var ptr = 0;
+
 
 function create(){
+  document.getElementById("dealcard").disabled = false;
     for(let i = 0; i < SUITS.length; i++){
 	    for(let j = 0; j < RANK.length; j++)
             deck.push(RANK[j] + SUITS[i]);
         }
-console.log(deck);
+        deck = shuffle(deck);
+deckBar[0].innerHTML= deckToString(deck);
 }
 function shuffle(){
 	let shuffled = [];
@@ -20,7 +40,6 @@ function shuffle(){
   	shuffled.push(deck[r]);
     deck.splice(r,1);
   }
-  console.log(shuffled);
   deck = shuffled;
   deckBar[0].innerHTML = deckToString(deck);
     return shuffled;
@@ -169,11 +188,31 @@ function dealCard(){
       break;
   
   }
-  deck.splice(r,1);
-  hand.push(rank + " of " + suit);
+  currentHand[0].innerHTML = deck[r] + " (" +rank + " of " + suit + ")" ;
+  
+  hand.push(deck.splice(r,1));
   deckBar[0].innerHTML = deckToString(deck);
   handBar[0].innerHTML = deckToString(hand);
+  if (deck.length == 0){
+    document.getElementById("dealcard").disabled = true;
+  }
+  ptr = hand.length - 1;
+  if (ptr >= 1) document.getElementById("back").disabled = false;
+  view[0].innerHTML = hand[ptr];
   return (rank + " of " + suit);
+}
+
+function next(){
+  ptr = ptr + 1;
+  view[0].innerHTML = hand[ptr];
+  if(ptr == hand.length - 1) document.getElementById("next").disabled = true;
+  document.getElementById("back").disabled = false;
+}
+function back(){
+  document.getElementById("next").disabled = false;
+  ptr = ptr - 1;
+  view[0].innerHTML = hand[ptr];
+  if(ptr == 0) document.getElementById("back").disabled = true;
 }
 /*while (deck.length > 0){
 console.log(dealCard(deck));
@@ -183,8 +222,22 @@ function deckToString(deck){
     for (let i = 0; i < deck.length; i++){
         res = res + deck[i] + ', ';
     }
-    console.log(res);
+
     return res;
 }
+function clearDeck(){
+  deck = [];
+  hand = [];
+  deckBar[0].innerHTML = deckToString(deck);
+  handBar[0].innerHTML = deckToString(hand);
+  currentHand[0].innerHTML = '';
+  document.getElementById("dealcard").disabled = true;
+  document.getElementById("back").disabled = true;
+  document.getElementById("next").disabled = false;
 
+}
+function reshuffle(){
+  clearDeck();
+  create();
+}
 

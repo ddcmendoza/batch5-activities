@@ -6,12 +6,26 @@
     <title>Cards</title>
 </head>
 <body>
-    <div class ="deck"></div>
+    <div style="height:4em">
+        <div>Current Hand:</div>
+        <div class="hand"></div>
+    </div>
+    <div>Current View:</div>
+    <div class="view"></div>
+    <button onclick="back()" disabled="true" id='back'>⇐</button>
+    <button onclick="next()" disabled="true" id='next'>⇒</button>
+    <div style="height:5em">
+        <div>Deck:</div>
+        <div class ="deck"></div>
+    </div>
     <button onclick="create()">Create Deck</button>
     <button onclick="shuffle()">Shuffle</button>
     <button onclick="arrangeBySuit()">Sort by Suit</button>
     <button onclick="arrangeByRank()">Sort by Rank</button>
-    <button onclick="dealCard()">Deal a Card</button>
+    <button onclick="dealCard()" id="dealcard" disabled="true">Deal a Card</button>
+    <button onclick="clearDeck()">Clear Deck</button>
+    <button onclick="reshuffle()">Reshuffle</button>
+    <div>Draw History:</div>
     <div class ="cards-list"></div>
 </body>
 <script src="./script.js"></script>
