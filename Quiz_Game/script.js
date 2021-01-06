@@ -54,19 +54,20 @@ for(let i = 0; i < QUESTIONS.length; i++){
 
 function startQuiz(){
     let r = Math.floor(Math.random() * quiz.length);
-    Q[0].innerHTML = quiz[r].question;
+    /* Q[0].innerHTML = quiz[r].question;
     S1[0].innerHTML = "(0) - " + quiz[r].choices[0];
     S2[0].innerHTML = "(1) - " + quiz[r].choices[1];
-    S3[0].innerHTML = "(2) - " + quiz[r].choices[2];
+    S3[0].innerHTML = "(2) - " + quiz[r].choices[2]; */
     console.log(quiz[r].question);
     console.log("(0) - " + quiz[r].choices[0]);
     console.log("(1) - " + quiz[r].choices[1]);
     console.log("(2) - " + quiz[r].choices[2]);
+    console.log("  ");
     BUTTON[0].innerHTML = "New Question";
-    let ans = '';
-    while (ans===''){
-        ans = prompt("Enter your answer");
-    }
-    if(parseInt(ans) === quiz[r].answer) alert("Correct!");
-    else alert("Wrong! :(")
+        let ans = '';
+        while (ans ===''){
+            ans = window.prompt("Enter your answer");
+        }
+        if(parseInt(ans) === quiz[r].answer) alert("Correct!");
+        else alert("Wrong! :(");
 }
