@@ -3,14 +3,22 @@ General TODO:
 1. Alternating moves [x]
 2. Move and Move Checking [x]
 3. Piece Checking [x]
-4. Victory Condition - Checkmate and Timer running out [check started][timer Check done]
+4. Victory Condition - Checkmate and Timer running out [check done][timer Check done]
     Tasks:
     -finish isCheck() function [done]
-    -checkPiece() function update when isChecked
+    -checkPiece() function update when isChecked [done]
     -make a function to count available piece for movement [done]
 5. En passant [x] /Castling [x]
 6. Timers [x]
 7. Pawn promotion [x]
+
+BUG FIX TO DO (Jan 8, 2021):
+1. getMoves() and checkMove() consider scenario:
+    -Pawn is blocking an opposing checker and pawn can capture the possible checker.
+    Expected: will only highlight and allow capturing the possible checker instead of advancing.
+    Current Behavior: highlight and able to advance forward, hence opening King to check
+    Possible fix:
+        - Add a scanner on which will check the diagonals of the PAWN if it is blocking a checker to KING, then for getMoves() only add the position of the checker to res, for checkMove() make sure that advancing will return false only capturing will turn to true 
 */
 
 
