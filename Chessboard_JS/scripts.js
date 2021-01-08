@@ -862,6 +862,7 @@ function displayMove(r,c,piece,color){
     for(let i = 0; i < moves.length; i++){
         let box = getBox(moves[i][0],moves[i][1])[0];
         box.id = 'valid';
+        if (box.innerHTML != '') box.id = 'valid-capture';
     }
     //console.log(moves);
     //TO DO [done]
@@ -1064,6 +1065,7 @@ function checkPiece(r,c,piece,color){
     let diag2 = [ifront, jback];
     let diag3 = [iback, jfront];
     let diag4 = [iback, jback];
+
     while(ifront || iback || jfront || jback || (diag1[0] && diag1[1]) || (diag2[0] && diag2[1]) || (diag3[0] && diag3[1]) || (diag4[0] && diag4[1])){
         if(ifront){
             const frontPiece = document.getElementsByClassName("box r"+ ifront +" c" + c);
@@ -1080,8 +1082,8 @@ function checkPiece(r,c,piece,color){
             if(frontPiece[0].innerHTML != ''){ifront = null;}
         }
         if(iback){
-             const backPiece = document.getElementsByClassName("box r"+ iback +" c" + c);
-             if (backPiece[0].innerHTML == KING && backPiece[0].style.color == color){
+            const backPiece = document.getElementsByClassName("box r"+ iback +" c" + c);
+            if (backPiece[0].innerHTML == KING && backPiece[0].style.color == color){
                 // do check on the front to see if enemy rook or queen is present, if yes, return false
                 for(let x = r + 1; x <= 8; x++){
                     const cPiece = document.getElementsByClassName("box r"+ x + " c" + c);
@@ -1121,28 +1123,59 @@ function checkPiece(r,c,piece,color){
             jback = (jback - 1) >= 1? (jback-1):null;
             if(leftPiece[0].innerHTML != ''){jback = null;}
         }
+
+
         if(diag1[0] && diag1[1]){
             const diagPiece1 = document.getElementsByClassName("box r"+ diag1[0] +" c" + diag1[1]);
             if(diagPiece1[0].innerHTML == KING && diagPiece1[0].style.color == color){
                 // do check on the opposite diagonal to see if enemy bishop or queen is present, if yes, return false
                 for(let x = r - 1, y = c - 1; x >= 1 && y >= 1; x--, y--){
                     const cPiece = document.getElementsByClassName("box r"+ x + " c" + y);
-                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN)){
-                        return false;
+                    if(whiteMove){
+                        if(x === r - 1 && y === c - 1){
+                            if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN || piece == PAWN)){
+                                return false;
+                            }
+                        }
+                        else{
+                            if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN)){
+                                return false;
+                            }
+                        }
+                    }
+                    else{
+                        if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN)){
+                            return false;
+                        }
                     }
                 }
             }
             diag1 = [(diag1[0] + 1) <= 8? (diag1[0] + 1):null , (diag1[1] + 1) <= 8? (diag1[1] + 1):null];
             if(diagPiece1[0].innerHTML != ''){diag1 = [null,null];}
         }
+
         if(diag2[0] && diag2[1]){
             const diagPiece2 = document.getElementsByClassName("box r"+ diag2[0] +" c" + diag2[1]);
             if(diagPiece2[0].innerHTML == KING && diagPiece2[0].style.color == color){
                 // do check on the opposite diagonal to see if enemy bishop or queen is present, if yes, return false
                 for(let x = r - 1, y = c + 1; x >= 1 && y <= 8; x--, y++){
                     const cPiece = document.getElementsByClassName("box r"+ x + " c" + y);
-                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN)){
-                        return false;
+                    if(whiteMove){
+                        if(x === r - 1 && y === c + 1){
+                            if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN || piece == PAWN)){
+                                return false;
+                            }
+                        }
+                        else{
+                            if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN)){
+                                return false;
+                            }
+                        }
+                    }
+                    else{
+                        if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN)){
+                            return false;
+                        }
                     }
                 }
             }
@@ -1155,8 +1188,22 @@ function checkPiece(r,c,piece,color){
                 // do check on the opposite diagonal to see if enemy bishop or queen is present, if yes, return false
                 for(let x = r + 1, y = c - 1; x <= 8 && y >= 1; x++, y--){
                     const cPiece = document.getElementsByClassName("box r"+ x + " c" + y);
-                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN)){
-                        return false;
+                    if(!whiteMove){
+                        if(x === r + 1 && y === c - 1){
+                            if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN || piece == PAWN)){
+                                return false;
+                            }
+                        }
+                        else{
+                            if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN)){
+                                return false;
+                            }
+                        }
+                    }
+                    else{
+                        if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN)){
+                            return false;
+                        }
                     }
                 }
             }
@@ -1169,8 +1216,22 @@ function checkPiece(r,c,piece,color){
                 // do check on the opposite diagonal to see if enemy bishop or queen is present, if yes, return false
                 for(let x = r + 1, y = c + 1; x <= 8 && y <= 8; x++, y++){
                     const cPiece = document.getElementsByClassName("box r"+ x + " c" + y);
-                    if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& (piece != BISHOP || piece != QUEEN)){
-                        return false;
+                    if(!whiteMove){
+                        if(x === r + 1 && y === c + 1){
+                            if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN || piece == PAWN)){
+                                return false;
+                            }
+                        }
+                        else{
+                            if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN)){
+                                return false;
+                            }
+                        }
+                    }
+                    else{
+                        if(cPiece[0].style.color != color && (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN)&& !(piece == BISHOP || piece == QUEEN)){
+                            return false;
+                        }
                     }
                 }
             }
@@ -1178,6 +1239,7 @@ function checkPiece(r,c,piece,color){
             if(diagPiece4[0].innerHTML != ''){diag4 = [null,null];}
         }
     }
+
     if(isChecked){
         /*TO DO
         Logic:

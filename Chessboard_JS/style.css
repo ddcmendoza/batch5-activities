@@ -84,7 +84,7 @@ div#functions div:hover{
     div#functions{
         position: fixed;
         top:85vh;
-        left:40vw;
+        left:4vw;
         color: white;
         font-size: 3vh;
     }
@@ -143,5 +143,10 @@ div#footnote{
 }
 #valid{
     box-shadow: 0 0 1vh yellow;
+    z-index: 100;
+}
+#valid-capture{
+    box-shadow: 0 0 1vh green;
+    text-shadow: 0 0 1vh red;
     z-index: 100;
 }
