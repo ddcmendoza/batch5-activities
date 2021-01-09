@@ -1,6 +1,10 @@
+@font-face{
+    font-family: GothamMedium;
+    src: url('GothamMedium.otf');
+}
 
 *{
-    font-family: "Lucida Handwriting";
+    font-family: GothamMedium;
     text-shadow: 1.5px 1.5px .75px #512DA8, -1.5px -1.5px .75px #B388FF;
     color: #FFEA00;
 }
