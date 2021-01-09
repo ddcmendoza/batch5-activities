@@ -18,7 +18,9 @@ BUG FIX TO DO (Jan 8, 2021):
     Expected: will only highlight and allow capturing the possible checker instead of advancing.
     Current Behavior: highlight and able to advance forward, hence opening King to check
     Possible fix:
-        - Add a scanner on which will check the diagonals of the PAWN if it is blocking a checker to KING, then for getMoves() only add the position of the checker to res, for checkMove() make sure that advancing will return false only capturing will turn to true 
+        - Add a scanner on which will check the diagonals of the PAWN if it is blocking a checker to KING, then for getMoves() only add the position of the checker to res, for checkMove() make sure that advancing will return false only capturing will turn to true
+        
+    -Similar as above, but instead for cases of ROOK or QUEEN, which means only advancing forward should be possible, and not capturing (going the diagonal)
 */
 
 
@@ -516,48 +518,55 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
     switch(holdPiece){
         case PAWN:
             // lol definitely will change later, but good for now 12/20/2020
-            // En Passant condition
-            if (enPassantAvailable){
-                    let cPiece = document.getElementsByClassName("box r"+ (prevR) +" c" + (curC))
-                    if (curPiece == '' && cPiece[0].id == 'enPassant' && (curR == 3|| curR==6)){
-                        cPiece[0].id = '';
-                        cPiece[0].innerHTML = '';
-                        cPiece[0].style.color = '';
+            // for pawn blocking a checker
+            let checkFlag = false;
+
+            // for bishop/queen
+            // for rook/queen
+            if(!checkFlag){
+                // En Passant condition
+                if (enPassantAvailable){
+                        let cPiece = document.getElementsByClassName("box r"+ (prevR) +" c" + (curC))
+                        if (curPiece == '' && cPiece[0].id == 'enPassant' && (curR == 3|| curR==6)){
+                            cPiece[0].id = '';
+                            cPiece[0].innerHTML = '';
+                            cPiece[0].style.color = '';
+                            return true;
+                        }
+                }
+                // when not in the starting square
+                if((curR+(multiplier*1))*multiplier < (prevR)*multiplier && !(prevR ==7 || prevR ==2)){
+                    return false;
+                }
+                // when capturing
+                if(curPiece != ''){
+                    if(curR == prevR - 1*multiplier && (curC == prevC + 1 || curC == prevC-1)){
                         return true;
                     }
-            }
-            // when not in the starting square
-            if((curR+(multiplier*1))*multiplier < (prevR)*multiplier && !(prevR ==7 || prevR ==2)){
-                return false;
-            }
-            // when capturing
-            if(curPiece != ''){
-                if(curR == prevR - 1*multiplier && (curC == prevC + 1 || curC == prevC-1)){
-                    return true;
-                }
-                else{
-                    return false;
-                }
-            }
-            // if going to empty space
-            if(curPiece == ''){
-                if((curR+(multiplier*2))*multiplier < (prevR)*multiplier){
-                    return false;
-                }
-                if (Math.abs(curR-prevR) == 2) {
-                    if(enPassantAvailable){
-                        clearID();
+                    else{
+                        return false;
                     }
-                    console.log('en passant available');
-                    piece[0].id = 'enPassant';
-                    enPassantAvailable = true;
-                    roundsEnPassant = 1;
                 }
-                if(curC != prevC){
-                    return false;
-                }
-                else{
-                    return true;
+                // if going to empty space
+                if(curPiece == ''){
+                    if((curR+(multiplier*2))*multiplier < (prevR)*multiplier){
+                        return false;
+                    }
+                    if (Math.abs(curR-prevR) == 2) {
+                        if(enPassantAvailable){
+                            clearID();
+                        }
+                        console.log('en passant available');
+                        piece[0].id = 'enPassant';
+                        enPassantAvailable = true;
+                        roundsEnPassant = 1;
+                    }
+                    if(curC != prevC){
+                        return false;
+                    }
+                    else{
+                        return true;
+                    }
                 }
             }
             break;
@@ -1282,9 +1291,7 @@ function checkPiece(r,c,piece,color){
             i = i - rdiff/Math.abs(rdiff);
             j = j - cdiff/Math.abs(cdiff);
         }
-
         if (intersection(path,moves).length == 0) return false;
-        //reset checker
     }
     return true;
 }
@@ -1305,35 +1312,41 @@ function getMoves(r,c,piece,color){
     let diag4 = [iback, jback];
     switch(piece){
         case PAWN:
-            if(whiteMove){
-                if(r != 7){
-                    if(getBox(r-1,c)[0].innerHTML =='') res.push([r-1,c]);
-                }
-                else{
-                    if(getBox(r-1,c)[0].innerHTML =='') res.push([r-1,c]);
-                    if(getBox(r-2,c)[0].innerHTML =='') res.push([r-2,c]);
-                }
-                if(c != 1){
-                    if(getBox(r-1,c-1)[0].style.color != color && getBox(r-1,c-1)[0].innerHTML != '') res.push([r-1,c-1]);
-                }
-                if(c != 8){
-                    if(getBox(r-1,c+1)[0].style.color != color && getBox(r-1,c+1)[0].innerHTML != '') res.push([r-1,c+1]);
-                }
+            // if pawn is blocking a checker (queen/bishop/rook)
+            let checkFlag = false;
+            // for queen/bishop
+            // for queen/rook
+            if(!checkFlag){
+                if(whiteMove){
+                    if(r != 7){
+                        if(getBox(r-1,c)[0].innerHTML =='') res.push([r-1,c]);
+                    }
+                    else{
+                        if(getBox(r-1,c)[0].innerHTML =='') res.push([r-1,c]);
+                        if(getBox(r-2,c)[0].innerHTML =='') res.push([r-2,c]);
+                    }
+                    if(c != 1){
+                        if(getBox(r-1,c-1)[0].style.color != color && getBox(r-1,c-1)[0].innerHTML != '') res.push([r-1,c-1]);
+                    }
+                    if(c != 8){
+                        if(getBox(r-1,c+1)[0].style.color != color && getBox(r-1,c+1)[0].innerHTML != '') res.push([r-1,c+1]);
+                    }
 
-            }
-            else{
-                if(r != 2){
-                    if(getBox(r+1,c)[0].innerHTML =='') res.push([r+1,c]);
                 }
                 else{
-                    if(getBox(r+1,c)[0].innerHTML =='') res.push([r+1,c]);
-                    if(getBox(r+2,c)[0].innerHTML =='') res.push([r+2,c]);
-                }
-                if(c != 1){
-                    if(getBox(r+1,c-1)[0].style.color != color  && getBox(r+1,c-1)[0].innerHTML != '') res.push([r+1,c-1]);
-                }
-                if(c != 8){
-                    if(getBox(r+1,c+1)[0].style.color != color  && getBox(r+1,c+1)[0].innerHTML != '') res.push([r+1,c+1]);
+                    if(r != 2){
+                        if(getBox(r+1,c)[0].innerHTML =='') res.push([r+1,c]);
+                    }
+                    else{
+                        if(getBox(r+1,c)[0].innerHTML =='') res.push([r+1,c]);
+                        if(getBox(r+2,c)[0].innerHTML =='') res.push([r+2,c]);
+                    }
+                    if(c != 1){
+                        if(getBox(r+1,c-1)[0].style.color != color  && getBox(r+1,c-1)[0].innerHTML != '') res.push([r+1,c-1]);
+                    }
+                    if(c != 8){
+                        if(getBox(r+1,c+1)[0].style.color != color  && getBox(r+1,c+1)[0].innerHTML != '') res.push([r+1,c+1]);
+                    }
                 }
             }
             break;
