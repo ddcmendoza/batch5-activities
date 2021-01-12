@@ -13,7 +13,7 @@ class Question{
         this.answer = answer;
     }
 }
-
+const PRAISE = ["GOOD JOB!","EXCELLENT WORK!!!","AMAZING!!!","KEEP IT UP!!","YOU'RE ON FIIIIRE!!"];
 const QUESTIONS = [
     "What does HTML stand for?",
     "How many tags are in a regular element?",
@@ -95,14 +95,9 @@ function submitAnswer(r){
         score = score + 1;
         streak = streak + 1;
         SCR[0].innerHTML = score;
-        if(streak === 5){
-            alert('Correct! 5 correct streak!!! AMAZING!');
-        }
-        else if(streak === 10){
-            alert('Correct! 10 correct streak!!! GOOD JOB!');
-        }
-        else if(streak === 15){
-            alert('Correct! 10 correct streak!!! EXCELLENT!');
+        if(streak %5 === 0){
+            let r = Math.floor(Math.random() * PRAISE.length);
+            alert('Correct! '+ streak + ' correct streak!!! '+ PRAISE[r]);
         }
         else{
             alert("Correct!");
