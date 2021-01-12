@@ -3,10 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *{
+            font-family:Verdana;
+            padding: .1em;
+            margin: .25em;
+            background-color: aliceblue;
+            text-shadow: .5px .5px .25px dimgray;
+        }
+        div.wrapper{
+            box-shadow: 1px 1px 1px black, -1px -1px 1px gray,0px 0px 1px black, 0px 0px 1px gray;
+            margin-top: 2em;
+            min-height: 4em;
+        }
+        #footnote {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+        div#navbar{
+            position: fixed;
+            top:0;
+            left:0;
+        }
+    </style>
     <title>Quiz Game</title>
 </head>
 <body>
-    <div class="wrapper" style="height: 10em">
+    <div id = "navbar">
+        <a href="../index.html" >Home</a> 
+    </div>
+    <div class="wrapper">
         <div class="question"></div>
         <div class="s1"></div>
         <div class="s2"></div>
@@ -15,9 +44,16 @@
     <button onclick="startQuiz()" class="button">Start Quiz</button>
     <button onclick="submitAnswer()" class="answer" disabled='true'>Answer</button>
     
-    <div>SCORE:</div>
-    <div class='score'>0</div>
-    <div>Type 'exit' to end quiz!</div>
+    <div class="wrapper">
+        <div>SCORE:</div>
+        <div class='score'>0</div>
+        <div>Type 'exit' to end quiz!</div>
+    </div>
+    <div id="footnote"> <!-- Sticky footer-->
+        <p>
+            Created by: Dave Mendoza &copy; 2021
+        </p>
+        </div>
 </body>
 
 </html>

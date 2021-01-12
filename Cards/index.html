@@ -4,32 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cards</title>
+    <style>
+        *{
+            font-family: Verdana;
+            background: aliceblue;
+        }
+        #footnote {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+        div#navbar{
+            position: fixed;
+            top:0;
+            left:0;
+
+        }
+        .wrapper{
+            margin-top: 2em;
+            box-shadow: 1px 1px 1px black, -1px -1px 1px gray,0px 0px 1px black, 0px 0px 1px gray;
+            padding: .5em;
+        }
+
+    </style>
 </head>
 <body>
-    <div style="height:2.5em">
-        <div>Current Hand:</div>
-        <div class="hand"></div>
+    <div id = "navbar">
+        <a href="../index.html" >Home</a> 
     </div>
-    <div style="height:2.5em">
-        <div>Current View:</div>
-        <div class="view"></div>
+    <div class='wrapper'>
+        <div style="height:2.5em">
+            <div>Current Hand:</div>
+            <div class="hand"></div>
+        </div>
+        <div style="height:2.5em">
+            <div>Current View:</div>
+            <div class="view"></div>
+        </div>
+            <button onclick="back()" disabled="true" id='back'>⇐</button>
+            <button onclick="next()" disabled="true" id='next'>⇒</button>
+            <div style="height:5em">
+        
+            <div>Deck:</div>
+            <div class ="deck"></div>
+        </div>
+        <button onclick="create()">Create Deck</button>
+        <button onclick="shuffle()">Shuffle</button>
+        <button onclick="arrangeBySuit()">Sort by Suit</button>
+        <button onclick="arrangeByRank()">Sort by Rank</button>
+        <button onclick="dealCard()" id="dealcard" disabled="true">Deal a Card</button>
+        <button onclick="clearDeck()">Clear Deck</button>
+        <button onclick="reshuffle()">Reshuffle</button>
+        <div>Draw History:</div>
+        <div class ="cards-list"></div>
     </div>
-        <button onclick="back()" disabled="true" id='back'>⇐</button>
-        <button onclick="next()" disabled="true" id='next'>⇒</button>
-        <div style="height:5em">
-    
-        <div>Deck:</div>
-        <div class ="deck"></div>
-    </div>
-    <button onclick="create()">Create Deck</button>
-    <button onclick="shuffle()">Shuffle</button>
-    <button onclick="arrangeBySuit()">Sort by Suit</button>
-    <button onclick="arrangeByRank()">Sort by Rank</button>
-    <button onclick="dealCard()" id="dealcard" disabled="true">Deal a Card</button>
-    <button onclick="clearDeck()">Clear Deck</button>
-    <button onclick="reshuffle()">Reshuffle</button>
-    <div>Draw History:</div>
-    <div class ="cards-list"></div>
+    <div id="footnote"> <!-- Sticky footer-->
+        <p>
+            Created by: Dave Mendoza &copy; 2021
+        </p>
+        </div>
 </body>
 <script src="./script.js"></script>
 </html>
