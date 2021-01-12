@@ -3,6 +3,8 @@ const S1 = document.getElementsByClassName('s1');
 const S2 = document.getElementsByClassName('s2');
 const S3 = document.getElementsByClassName('s3');
 const BUTTON = document.getElementsByClassName('button');
+const ANS = document.getElementsByClassName('answer');
+const SCR = document.getElementsByClassName('score');
 
 class Question{
     constructor(question, choices, answer){
@@ -48,26 +50,69 @@ const CHOICES = [
 ]
 const ANSWER = [0,0,1,0,0,1,1,0,1,0,0,0,0,1,1];
 var quiz = []
+var score = 0;
+var streak = 0;
+
 for(let i = 0; i < QUESTIONS.length; i++){
     quiz.push(new Question(QUESTIONS[i],CHOICES[i],ANSWER[i]))
 }
 
+let current;
+
 function startQuiz(){
     let r = Math.floor(Math.random() * quiz.length);
-    /* Q[0].innerHTML = quiz[r].question;
+     Q[0].innerHTML = quiz[r].question;
     S1[0].innerHTML = "(0) - " + quiz[r].choices[0];
     S2[0].innerHTML = "(1) - " + quiz[r].choices[1];
-    S3[0].innerHTML = "(2) - " + quiz[r].choices[2]; */
+    if (quiz[r].choices[1] !== '') S3[0].innerHTML = "(2) - " + quiz[r].choices[2];
     console.log(quiz[r].question);
     console.log("(0) - " + quiz[r].choices[0]);
     console.log("(1) - " + quiz[r].choices[1]);
     console.log("(2) - " + quiz[r].choices[2]);
     console.log("  ");
-    BUTTON[0].innerHTML = "New Question";
-        let ans = '';
-        while (ans ===''){
-            ans = window.prompt("Enter your answer");
+    ANS[0].disabled = false;
+    BUTTON[0].disabled = true;
+    current = r;
+}
+
+function submitAnswer(r){
+    let ans = '';
+    while (ans ===''){
+        ans = window.prompt("Enter your answer");
+    }
+    if(ans == 'exit'){
+        score = 0;
+        SCR[0].innerHTML = 0;
+        Q[0].innerHTML = '';
+        S1[0].innerHTML = '';
+        S2[0].innerHTML = '';
+        S3[0].innerHTML = '';
+        ANS[0].disabled = true;
+        BUTTON[0].disabled = false;
+        return;
+    }
+    if(parseInt(ans) === quiz[current].answer) {
+        score = score + 1;
+        streak = streak + 1;
+        SCR[0].innerHTML = score;
+        if(streak === 5){
+            alert('Correct! 5 correct streak!!! AMAZING!');
         }
-        if(parseInt(ans) === quiz[r].answer) alert("Correct!");
-        else alert("Wrong! :(");
+        else if(streak === 10){
+            alert('Correct! 10 correct streak!!! GOOD JOB!');
+        }
+        else if(streak === 15){
+            alert('Correct! 10 correct streak!!! EXCELLENT!');
+        }
+        else{
+            alert("Correct!");
+        }
+    }
+    else {
+        alert("Wrong! :(");
+        streak = 0;
+    }
+    BUTTON[0].disabled = false;
+    startQuiz();
+
 }
