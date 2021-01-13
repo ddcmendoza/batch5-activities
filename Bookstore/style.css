@@ -1,3 +1,46 @@
+*{
+    font-family: Verdana;
+}
+
+div.wrapper{
+    margin-top: 2em;
+    margin-bottom: 1em;
+}
+h1{
+    width: 50%;
+    min-height: 1.5em;
+    border: 2px solid dimgray;
+    padding-left: .5em;
+    border-radius: .5em;
+    box-shadow: 1px 1px 0.5px dimgray;
+}
+div.inventory{
+    min-height: 10em;
+    border: 1px solid dimgray;
+    border-radius: 1em;
+    box-shadow: 1px 1px 0.5px dimgray;
+}
+div.books{
+    color: white;
+    background:black;
+    border: 1px solid dimgray;
+    border-radius: 1em;
+    box-shadow: 1px 1px 0.5px dimgray;
+    padding: 1em;
+    margin-bottom: .5em;
+}
+div.books:hover{
+    color:black;
+    background:white;
+}
+div.header{
+    display: flex;
+}
+h1.earnings {
+    display: none;
+}
+
+
 div#footnote{
     text-align: center;
     background: none;
@@ -13,5 +56,4 @@ div#navbar{
     left:0;
     color: black;
     font-size: 1.5vw;
-    
 }
