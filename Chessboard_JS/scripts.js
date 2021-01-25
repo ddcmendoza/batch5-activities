@@ -19,7 +19,6 @@ BUG FIX TO DO (Jan 8, 2021):
     Current Behavior: highlight and able to advance forward, hence opening King to check
     Possible fix:
         - Add a scanner on which will check the diagonals of the PAWN if it is blocking a checker to KING, then for getMoves() only add the position of the checker to res, for checkMove() make sure that advancing will return false only capturing will turn to true
-        
     -Similar as above, but instead for cases of ROOK or QUEEN, which means only advancing forward should be possible, and not capturing (going the diagonal)
 */
 
@@ -520,9 +519,37 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
             // lol definitely will change later, but good for now 12/20/2020
             // for pawn blocking a checker
             let checkFlag = false;
+            let kingR, kingC, danger = false;
+            if(whiteMove){
+                kingR = whiteKing[0];
+                kingC = whiteKing[1];
+            }
+            else{
+                kingR = blackKing[0];
+                kingC = blackKing[1];
+            }
 
-            // for bishop/queen
-            // for rook/queen
+            let diffR = kingR - prevR;
+            let diffC = kingC - prevC;
+            let incR = diffR/Math.abs(diffR);
+            let incC = diffC/Math.abs(diffC);
+            console.log(incR);
+            console.log(incC);
+            if(diffR/diffC === 1 || diffR/diffC === -1){
+                // for bishop/queen
+                if((prevR-curR == incR) && (prevC-curC == incC)) return true;
+                if(curR - incR >= 1 && curR -incR <= 8 && curC - incC >= 1 && curC - incC <=8){
+                    let cPiece = getBox(prevR - incR, prevC - incC);
+                    if (cPiece[0].innerHTML == BISHOP || cPiece[0].innerHTML == QUEEN){
+                        danger = true;
+                    }
+                }
+            }
+            else if(kingC === prevC){
+                // for rook/queen
+                danger = true;
+            }
+
             if(!checkFlag){
                 // En Passant condition
                 if (enPassantAvailable){
@@ -539,7 +566,7 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
                     return false;
                 }
                 // when capturing
-                if(curPiece != ''){
+                if(curPiece != '' && !danger){
                     if(curR == prevR - 1*multiplier && (curC == prevC + 1 || curC == prevC-1)){
                         return true;
                     }
@@ -548,7 +575,7 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
                     }
                 }
                 // if going to empty space
-                if(curPiece == ''){
+                if(curPiece == '' && !danger){
                     if((curR+(multiplier*2))*multiplier < (prevR)*multiplier){
                         return false;
                     }
