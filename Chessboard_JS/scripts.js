@@ -54,8 +54,8 @@ var checker = null;
 var whiteInt;
 var blackInt;
 
-var wTime = 60*15;
-var bTime = 60*15;
+var wTime = 0;
+var bTime = 0;
 var whiteMove = true;
 
 const BOX = document.getElementsByClassName("box");
@@ -125,8 +125,12 @@ function removePieces(){
     }
     clearInterval(whiteInt);
     clearInterval(blackInt);
-    wTime = 60*15;
-    bTime = 60*15;
+    let limit = prompt("How many minutes is the timer?");
+    while(isNaN(parseInt(limit))){
+        limit = prompt("How many minutes is the timer? Please enter valid number >:(");
+    }
+    wTime = 60*parseInt(limit);
+    bTime = 60*parseInt(limit);
     whiteKing = [8,5];
     blackKing = [1,5];
     checker = null;
