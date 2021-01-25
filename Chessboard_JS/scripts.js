@@ -549,10 +549,6 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
                     }
                 }
             }
-            else if(kingC === prevC){
-                // for rook/queen
-                danger = true;
-            }
 
             if(!checkFlag){
                 // En Passant condition
@@ -592,7 +588,7 @@ function checkMove(curR,curC,prevR,prevC,holdPiece,color,piece){
                         enPassantAvailable = true;
                         roundsEnPassant = 1;
                     }
-                    if(curC != prevC){
+                    if(curC != prevC || (curR-prevR)/(Math.abs(curR-prevR)) == multiplier){
                         return false;
                     }
                     else{
