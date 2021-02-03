@@ -1,6 +1,6 @@
 
 
-const APIKEY = "RGAPI-1baab92c-4b19-4c23-b672-ad64b01db9b9";
+const APIKEY = config.MY_API_TOKEN;
 const LEADERBOARD = document.querySelector("table#leaderboard");
 
 /*
@@ -16,15 +16,17 @@ function getLeaderboards(server){
             let rank = parseInt(data.players[i].rank) + 1;
             let lp = data.players[i].lp;
             let tr = document.createElement("tr");
-            let td_rank = document.createElement("td");
+            let td_rank = document.createElement("th");
             let td_name = document.createElement("td");
             let td_lp = document.createElement("td");
+            td_rank.scope = "row";
             td_rank.innerHTML = rank;
             td_name.innerHTML = name;
             td_lp.innerHTML = lp;
             tr.appendChild(td_rank);
             tr.appendChild(td_name);
             tr.appendChild(td_lp);
+
             LEADERBOARD.appendChild(tr);
 
         }
@@ -33,7 +35,7 @@ function getLeaderboards(server){
 }
 getLeaderboards("asia");
 
-function getPlayerId(server,name,tag){
+/* function getPlayerId(server,name,tag){
      fetch(`https://${server}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${name}/${tag}?api_key=${APIKEY}`)
     .then(response => response.json())
     .then(data => { 
@@ -44,4 +46,4 @@ function getPlayerId(server,name,tag){
     })
 }
 
-console.log(getPlayerId("asia","WillemMorgif","Dave"));
+console.log(getPlayerId("asia","WillemMorgif","Dave")); */
