@@ -8,13 +8,19 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="style.css"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>Document</title>
+    <title>Legends of Runeterra Companion</title>
 </head>
 <body>
-    <div id = "navbar">
-		<a href="../index.html" >Home</a>
+    <div id = "navbar" class="container-fluid">
+		<a href="../index.html" class="text-light">Home</a>
     </div>
-    
+      <div class="container-fluid btn-group"> 
+            <a onclick="getLeaderboards('americas')" class="btn btn-secondary" id="americas">AMERICAS</a>
+            <a onclick="getLeaderboards('asia')" class="btn btn-secondary" id="asia">ASIA</a>
+            <a onclick="getLeaderboards('europe')" class="btn btn-secondary" id="europe">EUROPE</a>
+            <a onclick="getLeaderboards('sea')" class="btn btn-secondary" id="sea">SEA</a>
+      </div>
+
     <div class = "leaderboard-module container-fluid">
         <table id="leaderboard" class="table table-dark table-striped table-hover">
             <tr>
@@ -24,9 +30,8 @@
             </tr>
         </table>
     </div>
-
-    <div id = "footnote">
-		Created by: Dave Mendoza &copy; 2021
+    <div id = "footnote" class="footer mt-auto py-1 bg-light">
+		<span class="text-muted">Created by: Dave Mendoza &copy; 2021</span>
 	</div>
     <script type='text/javascript' src='config.js'></script>
     <script src="script.js"> </script>
