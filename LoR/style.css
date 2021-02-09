@@ -32,3 +32,14 @@ body::before{
     background-size: auto 100%;
     filter:grayscale(85%);
 }
+
+td {
+    overflow-x:hidden;
+}
+
+@media only screen and (max-width: 540px){
+    .table td,.table th{
+        padding: 0.2rem !important;
+    }
+}
+
