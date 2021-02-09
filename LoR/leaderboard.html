@@ -31,10 +31,10 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                <a class="nav-link" href="index.html">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="leaderboard.html">Leaderboard</a>
+                <a class="nav-link active"  aria-current="page" href="leaderboard.html">Leaderboard</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="match-history.html">Match History</a>
@@ -64,10 +64,24 @@
           </div>
         </div>
       </nav>
-      <h2 class="bg-dark text-light text-muted">Legends of Runeterra</h2>
-      <p class="text-light bg-dark lead">Legends of Runeterra is a free-to-play digital collectible card game developed and published by Riot Games. It released on April 29, 2020 for Microsoft Windows, Android, and iOS. The game uses characters and a setting originating in League of Legends, a multiplayer online battle arena game by Riot Games.</p>
-      <p class="text-light bg-dark">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto natus aut quo nulla, vitae praesentium magni commodi animi a amet doloribus corporis, rem reiciendis quisquam.</p>
+
       
+      <div class="container-fluid btn-group"> 
+            <a onclick="getLeaderboards('americas')" class="btn btn-secondary" id="americas">AMERICAS</a>
+            <a onclick="getLeaderboards('asia')" class="btn btn-secondary" id="asia">ASIA</a>
+            <a onclick="getLeaderboards('europe')" class="btn btn-secondary" id="europe">EUROPE</a>
+            <a onclick="getLeaderboards('sea')" class="btn btn-secondary" id="sea">SEA</a>
+      </div>
+
+    <div class = "leaderboard-module container-fluid">
+        <table id="leaderboard" class="table table-dark table-striped table-hover">
+            <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">Name</th>
+                <th scope="col">LP</th>
+            </tr>
+        </table>
+    </div>
     <div id = "footnote" class="footer mt-auto py-1 bg-light">
 		<span class="text-muted">Created by: Dave Mendoza &copy; 2021</span>
 	</div>
