@@ -37,6 +37,11 @@ td {
     overflow-x:hidden;
 }
 
+div.matches, h2#profileHeader{
+    text-align:center;
+}
+
+
 @media only screen and (max-width: 540px){
     .table td,.table th{
         padding: 0.2rem !important;

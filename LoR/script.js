@@ -8,17 +8,6 @@ const SERVERS = ['americas','asia','europe','sea'];
 Servers: asia, americas, europe
 
 */
-
-/*
-Collapsible menu
-*/
-const MENU = document.getElementById('navbarSupportedContent');
-const HAMBURGERMENU = document.querySelector('button.navbar-toggler');
-
-HAMBURGERMENU.addEventListener('click', ()=>{
-    MENU.classList.toggle('show');
-});
-
 function getLeaderboards(server){
     fetch(`https://${server}.api.riotgames.com/lor/ranked/v1/leaderboards?api_key=${APIKEY}`)
     .then(response =>  {
