@@ -30,14 +30,9 @@ async function getHistory(server,name,tag){
             let div_match_header = document.createElement('div');
             let div_match_details = document.createElement('div');
 
-            /* "info": {
-                "game_mode": "Constructed",
-                "game_type": "Ranked",
-                "game_start_time_utc": "2021-02-09T16:37:13.0187743+00:00",
-                "game_version": "live_2_1_18", */
-
             let mode = parsedMatch.info.game_mode;
             let type = parsedMatch.info.game_type;
+            let tc = parsedMatch.info.total_turn_count;
             let datetime = parsedMatch.info.game_start_time_utc.split('T');
             let date = datetime[0];
             let time = datetime[1].slice(0,8);
@@ -56,18 +51,21 @@ async function getHistory(server,name,tag){
             let type_con = document.createElement('div');
             let date_con = document.createElement('div');
             let time_con = document.createElement('div');
+            let turncount = document.createElement('div');
             let outcome = document.createElement('div');
 
             mode_con.innerHTML = `Game Mode: ${mode}`;
             type_con.innerHTML = `Game Type: ${type}`;
             date_con.innerHTML = `Date: ${date}`;
             time_con.innerHTML = `Time: ${time} UTC`;
+            turncount.innerHTML = `Total Turncount: ${tc}`;
             outcome.innerHTML =  (winner !=='Draw')?`${winner} WINS!`:`${winner}`;
 
             div_match_details.appendChild(mode_con);
             div_match_details.appendChild(type_con);
             div_match_details.appendChild(date_con);
             div_match_details.appendChild(time_con);
+            div_match_details.appendChild(turncount);
             div_match_details.appendChild(outcome);
 
             div_match.classList.add('container-fluid');
@@ -161,10 +159,6 @@ async function getHistory(server,name,tag){
                 getHistory(server,player2_name,player2_tL.toLowerCase()).catch(alert);
             });
             
-           /*  match_header.appendChild(a1);
-            match_header.innerHTML += " vs ";
-            match_header.appendChild(a2);
-            */
             div_match_header.appendChild(b_c1);
             div_match_header.appendChild(f1_1);
             div_match_header.appendChild(f1_2);
