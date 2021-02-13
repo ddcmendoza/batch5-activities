@@ -157,14 +157,14 @@ async function getHistory(server,name,tag){
                 console.log('working 1');
                 GAME_ID.value = player1_name;
                 TAGLINE.value = player1_tL;
-                sleep(1000).then(getHistory(server,player1_name,player1_tL.toLowerCase()).catch(alert));
+                getHistory(server,player1_name,player1_tL.toLowerCase()).catch(e => console.log(e));
 
             });
             a2.addEventListener('click',()=>{
                 console.log('working 2');
                 GAME_ID.value = player2_name;
                 TAGLINE.value = player2_tL;
-                sleep(1000).then(getHistory(server,player2_name,player2_tL.toLowerCase()).catch(alert));
+                getHistory(server,player2_name,player2_tL.toLowerCase()).catch(e => console.log(e));
 
             });
             
