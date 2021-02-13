@@ -14,7 +14,8 @@ body{
     background-image: url('img/bg.png');
     background-attachment: fixed;
     background-size: auto 100%;
-    background-position:center; 
+    background-position:center;
+    margin-bottom: 3em;
     
 
 }
@@ -41,8 +42,8 @@ div.matches, h2#profileHeader{
     text-align:center;
 }
 img{
-    max-width: 50px;
-    max-height: 50px;
+    max-width: 75px;
+    max-height: 75px;
 }
 
 

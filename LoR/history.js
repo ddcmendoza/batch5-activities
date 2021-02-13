@@ -1,6 +1,7 @@
-
+let matchHistory;
 async function getHistory(server,name,tag){
-        console.log('fetching')
+        console.log('fetching');
+        matchHistory = [];
         clearHistory();
         PROFILEHEADER.innerHTML = `${name}#${tag}'s ${numMatches} Recent Matches in ${server.toUpperCase()} Server`;
         let result = await fetch(`https://${server}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${name}/${tag}?api_key=${APIKEY}`);
@@ -8,13 +9,15 @@ async function getHistory(server,name,tag){
         let puuid = response.puuid;
         let res = await fetch(`https://${server}.api.riotgames.com/lor/match/v1/matches/by-puuid/${puuid}/ids?api_key=${APIKEY}`);
         let matches = await res.json();
-
         for (let i = 0; i < matches.length && i < numMatches; i++){
             let matchID = matches[i];
             let match = await fetch(`https://${server}.api.riotgames.com/lor/match/v1/matches/${matchID}?api_key=${APIKEY}`);
             let parsedMatch = await match.json();
-            let p1 = parsedMatch.info.players[0];
-            let p2 = parsedMatch.info.players[1];
+            matchHistory.push(await parsedMatch);
+        }
+        for(let i = 0; i < matchHistory.length; i++ ){
+            let p1 = matchHistory[i].info.players[0];
+            let p2 = matchHistory[i].info.players[1];
             
             let player1 = await fetch(`https://${server}.api.riotgames.com/riot/account/v1/accounts/by-puuid/${p1.puuid}?api_key=${APIKEY}`);
             let player1_json = await player1.json();
@@ -30,18 +33,18 @@ async function getHistory(server,name,tag){
             let div_match_header = document.createElement('div');
             let div_match_details = document.createElement('div');
 
-            let mode = parsedMatch.info.game_mode;
-            let type = parsedMatch.info.game_type;
-            let tc = parsedMatch.info.total_turn_count;
-            let datetime = parsedMatch.info.game_start_time_utc.split('T');
+            let mode = matchHistory[i].info.game_mode;
+            let type = matchHistory[i].info.game_type;
+            let tc = matchHistory[i].info.total_turn_count;
+            let datetime = matchHistory[i].info.game_start_time_utc.split('T');
             let date = datetime[0];
             let time = datetime[1].slice(0,8);
             let winner;
             if (p1.game_outcome == 'win'){
-                winner = player1_name;
+                winner = await player1_name;
             }
             else if(p2.game_outcome == 'win'){
-                winner = player2_name;
+                winner = await player2_name;
             }
             else {
                 winner = 'Draw';
@@ -75,6 +78,7 @@ async function getHistory(server,name,tag){
  
             div_match_header.classList.add('container-fluid');
             div_match_details.classList.add('container-fluid');
+
             if(winner === name){
                 div_match.classList.add('bg-success');
             }
@@ -89,6 +93,7 @@ async function getHistory(server,name,tag){
             div_match.classList.add('text-light');
             div_match.classList.add('p-2');
             div_match.classList.add('mb-1');
+            div_match.classList.add('w-75');
 
             let a1 = document.createElement('button');
             let a2 = document.createElement('button');
@@ -119,8 +124,10 @@ async function getHistory(server,name,tag){
             
             b_c1.classList.add('btn');
             b_c2.classList.add('btn');
-            b_c1.classList.add('btn-secondary');
-            b_c2.classList.add('btn-secondary');
+            b_c1.classList.add('btn-light');
+            b_c2.classList.add('btn-light');
+            b_c1.classList.add('mx-2');
+            b_c2.classList.add('mx-2');
 
             vs.innerHTML = " vs ";
              
@@ -147,16 +154,18 @@ async function getHistory(server,name,tag){
             });
 
             a1.addEventListener('click',()=>{
-                console.log('working 1')
+                console.log('working 1');
                 GAME_ID.value = player1_name;
                 TAGLINE.value = player1_tL;
-                getHistory(server,player1_name,player1_tL.toLowerCase()).catch(alert);
+                sleep(1000).then(getHistory(server,player1_name,player1_tL.toLowerCase()).catch(alert));
+
             });
             a2.addEventListener('click',()=>{
-                console.log('working 2')
+                console.log('working 2');
                 GAME_ID.value = player2_name;
                 TAGLINE.value = player2_tL;
-                getHistory(server,player2_name,player2_tL.toLowerCase()).catch(alert);
+                sleep(1000).then(getHistory(server,player2_name,player2_tL.toLowerCase()).catch(alert));
+
             });
             
             div_match_header.appendChild(b_c1);
@@ -173,9 +182,8 @@ async function getHistory(server,name,tag){
             div_match.appendChild(div_match_details);
 
             MATCH_HISTORY_CONTAINER.appendChild(div_match)
-
-
         }
+        
 }
     /*
     SAMPLE RESPONSE from lor match v1 endpoint
@@ -270,7 +278,11 @@ document.querySelector('button#searchMatches').addEventListener('click', ()=>{
     numMatches = parseInt(NUMBER_MATCHES.value);
 
     if(GAME_ID.value !== '' && TAGLINE.value !== '' && SERVER.innerHTML != 'Server' && NUMBER_MATCHES.value != '' && (numMatches >= 1 && numMatches <= 10) && !isNaN(numMatches)){
-        getHistory(SERVER.innerHTML,GAME_ID.value,TAGLINE.value).catch(alert);
+        getHistory(SERVER.innerHTML,GAME_ID.value,TAGLINE.value).catch(e =>{
+            if(e.name !== "AbortError"){
+                console.log(e);
+            }
+        });
     }
     else{
         let modal = new bootstrap.Modal(ALERT_WINDOW,{keyboard:false})
@@ -320,3 +332,7 @@ function clearErrors(){
         ERROR_CONTAINER.children[0].remove();
     }
 }
+
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+  }
