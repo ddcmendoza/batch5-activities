@@ -77,7 +77,15 @@ async function getHistory(server,name,tag){
 
  
             div_match_header.classList.add('container-fluid');
+            //div_match_header.classList.add('accordion-button');
+            div_match_header.classList.add('collapsed');
+            div_match_header.setAttribute('data-bs-toggle','collapse');
+            div_match_header.setAttribute('data-bs-target',`#flush-collapse${i}`);
+
             div_match_details.classList.add('container-fluid');
+            div_match_details.classList.add('accordion-collapse');
+            div_match_details.classList.add('collapse');
+            div_match_details.id = `flush-collapse${i}`;
 
             if(winner === name){
                 div_match.classList.add('bg-success');
@@ -91,6 +99,7 @@ async function getHistory(server,name,tag){
             div_match.classList.add('bg-gradient');
 
             div_match.classList.add('text-light');
+            div_match.classList.add('accordion-item');
             div_match.classList.add('p-2');
             div_match.classList.add('mb-1');
             div_match.classList.add('w-75');
@@ -157,14 +166,20 @@ async function getHistory(server,name,tag){
                 console.log('working 1');
                 GAME_ID.value = player1_name;
                 TAGLINE.value = player1_tL;
-                getHistory(server,player1_name,player1_tL.toLowerCase()).catch(e => console.log(e));
+                getHistory(server,player1_name,player1_tL.toLowerCase()).catch(e => {
+                    console.log(e);
+                    noMatchesToDisplay();
+                });
 
             });
             a2.addEventListener('click',()=>{
                 console.log('working 2');
                 GAME_ID.value = player2_name;
                 TAGLINE.value = player2_tL;
-                getHistory(server,player2_name,player2_tL.toLowerCase()).catch(e => console.log(e));
+                getHistory(server,player2_name,player2_tL.toLowerCase()).catch(e => {
+                    console.log(e);
+                    noMatchesToDisplay();
+                });
 
             });
             
@@ -181,7 +196,7 @@ async function getHistory(server,name,tag){
             div_match.appendChild(div_match_header);
             div_match.appendChild(div_match_details);
 
-            MATCH_HISTORY_CONTAINER.appendChild(div_match)
+            MATCH_HISTORY_CONTAINER.appendChild(div_match);
         }
         
 }
@@ -281,6 +296,7 @@ document.querySelector('button#searchMatches').addEventListener('click', ()=>{
         getHistory(SERVER.innerHTML,GAME_ID.value,TAGLINE.value).catch(e =>{
             if(e.name !== "AbortError"){
                 console.log(e);
+                noMatchesToDisplay();
             }
         });
     }
@@ -320,7 +336,19 @@ document.querySelector('button#searchMatches').addEventListener('click', ()=>{
         modal.toggle();
     }
 });
-
+function noMatchesToDisplay(){
+    let div_match = document.createElement('div');
+    div_match.classList.add('container-fluid');
+    div_match.classList.add('rounded');
+    div_match.classList.add('bg-gradient');
+    div_match.classList.add('bg-dark');
+    div_match.classList.add('text-light');
+    div_match.classList.add('h2');
+    div_match.classList.add('p-4');
+    div_match.classList.add('matches');
+    div_match.innerHTML = "No Matches to Display at the moment.";
+    MATCH_HISTORY_CONTAINER.appendChild(div_match);
+}
 function clearHistory(){
     while(MATCH_HISTORY_CONTAINER.children.length >= 1){
         MATCH_HISTORY_CONTAINER.children[0].remove();
