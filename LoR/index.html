@@ -25,7 +25,7 @@
     </nav> -->
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
+        <div class="container">
           <a class="navbar-brand" href="../index.html"><img src="img/dave.png" style="max-width:50px"></a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -69,10 +69,25 @@
      
       <h2 class="bg-dark text-light m-1 p-1">Legends of Runeterra </h2>
       <p class="text-light bg-dark lead m-1 p-1">Legends of Runeterra is a free-to-play digital collectible card game developed and published by Riot Games. It released on April 29, 2020 for Microsoft Windows, Android, and iOS. The game uses characters and a setting originating in League of Legends, a multiplayer online battle arena game by Riot Games.<br>
-        <a href="https://playruneterra.com/en-us/"><img src="img/Legends_of_Runeterra_logo.png"  class="img-fluid"></a>
+        
       </p>
-      <p class="text-light bg-dark m-1 p-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto natus aut quo nulla, vitae praesentium magni commodi animi a amet doloribus corporis, rem reiciendis quisquam.</p>
-      <div class="container-md bg-dark text-light p-2 rounded">
+      <div class="row matches py-2 bg-dark m-0"><a href="https://playruneterra.com/en-us/"><img src="img/Legends_of_Runeterra_logo.png"  class="img-fluid"></a>
+      </div>
+     <div class='container-fluid row bg-dark text-light m-0 mb-4 rounded'> 
+       <div class="container-fluid col matches" id="americasServer">
+         AMERICAS
+       </div>
+       <div class="container-fluid col matches" id="asiaServer">
+         ASIA
+        </div>
+       <div class="container-fluid col matches" id="europeServer">
+         EUROPE
+        </div>
+       <div class="container-fluid col matches" id="seaServer">
+         SEA
+        </div>
+      </div>
+      <div class="container-md bg-dark text-light p-2 rounded mb-4">
         <h3>Legends of Runeterra News</h3>
         <div class="container-fluid bg-secondary rounded">
           <script src="//rss.bloople.net/?url=https%3A%2F%2Fnews.google.com%2Frss%2Fsearch%3Fq%3Dlegends_of_runeterra%26hl%3Den-PH%26gl%3DPH%26ceid%3DPH%3Aen&detail=-1&limit=10&showtitle=false&type=js"></script>
@@ -83,5 +98,6 @@
 	</div>
     <script type='text/javascript' src='config.js'></script>
     <script src="script.js"> </script>
+    <script src="server.js"> </script>
 </body>
 </html>
