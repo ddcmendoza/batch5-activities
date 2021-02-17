@@ -8,7 +8,7 @@ async function getStatus(){
     let americas_status_json = await americas_status.json();
     let americas_status_maint = await americas_status_json.maintenances;
     let americas_status_incidents = await americas_status_json.incidents;
-
+    console.log(americas_status_incidents[0])
     if (americas_status_incidents.length === 0 && americas_status_maint.length === 0){
         let box = document.createElement('div');
         box.classList.add('container');
@@ -18,6 +18,18 @@ async function getStatus(){
         box.classList.add('m-2');
         box.innerHTML = 'Server Available';
         AMERICAS.appendChild(box);
+    }
+    else if (americas_status_incidents.length !== 0){
+        for(let i = 0; i < americas_status_incidents.length; i++ ){
+            let box = document.createElement('div');
+            box.classList.add('container');
+            box.classList.add('bg-warning');
+            box.classList.add('text-light');
+            box.classList.add('rounded');
+            box.classList.add('m-2');
+            box.innerHTML = americas_status_incidents[i].titles[0].content;
+            AMERICAS.appendChild(box);
+        }
     }
     else{
         let box = document.createElement('div');
@@ -46,6 +58,18 @@ async function getStatus(){
         box.innerHTML = 'Server Available';
         ASIA.appendChild(box);
     }
+    else if (asia_status_incidents.length !== 0){
+        for(let i = 0; i < asia_status_incidents.length; i++ ){
+            let box = document.createElement('div');
+            box.classList.add('container');
+            box.classList.add('bg-warning');
+            box.classList.add('text-light');
+            box.classList.add('rounded');
+            box.classList.add('m-2');
+            box.innerHTML = asia_status_incidents[i].titles[0].content;
+            ASIA.appendChild(box);
+        }
+    }
     else{
         let box = document.createElement('div');
         box.classList.add('container');
@@ -71,6 +95,18 @@ async function getStatus(){
         box.classList.add('m-2');
         box.innerHTML = 'Server Available';
         EUROPE.appendChild(box);
+    }
+    else if (europe_status_incidents.length !== 0){
+        for(let i = 0; i < europe_status_incidents.length; i++ ){
+            let box = document.createElement('div');
+            box.classList.add('container');
+            box.classList.add('bg-warning');
+            box.classList.add('text-light');
+            box.classList.add('rounded');
+            box.classList.add('m-2');
+            box.innerHTML = europe_status_incidents[i].titles[0].content;
+            EUROPE.appendChild(box);
+        }
     }
     else{
         let box = document.createElement('div');
@@ -98,6 +134,19 @@ async function getStatus(){
         box.innerHTML = 'Server Available';
         SEA.appendChild(box);
     }
+    else if (sea_status_incidents.length !== 0){
+        for(let i = 0; i < sea_status_incidents.length; i++ ){
+            let box = document.createElement('div');
+            box.classList.add('container');
+            box.classList.add('bg-warning');
+            box.classList.add('text-light');
+            box.classList.add('rounded');
+            box.classList.add('m-2');
+            box.innerHTML = sea_status_incidents[i].titles[0].content;
+            SEA.appendChild(box);
+        }
+    }
+    
     else{
         let box = document.createElement('div');
         box.classList.add('container');
