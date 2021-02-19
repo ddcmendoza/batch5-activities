@@ -45,6 +45,10 @@ img{
     max-width: 75px;
     max-height: 75px;
 }
+.feed-item-title>a{
+    color: white;
+    text-decoration: underline;
+}
 /* .onHover:hover{
     height: 25vw;
     max-height: 50vw;

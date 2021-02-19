@@ -13,6 +13,7 @@ let currentGameCard = {};
 let handCache = [];
 let drawnCards = [];
 
+
 currentGameCard = JSON.parse(localStorage.getItem('currentGameCard'));
 
 function checkDeck() {
@@ -28,7 +29,7 @@ function checkDeck() {
             else if (gameState === stateCache) {
                 stateChange = false;
             }
-            stateCache = gameState;
+            stateCache = await gameState;
 
             if (stateChange && gameState === 'InProgress') {
 
@@ -43,6 +44,7 @@ function checkDeck() {
                         throw new Error(message);
                     }
                     let data_json = await data.json();
+                    localStorage.setItem('data',JSON.stringify(data_json));
                     if (data_json.DeckCode !== null) {
                         curve = [0, 0, 0, 0, 0, 0, 0, 0, 0];
                         CONTAINER.innerHTML = "Current Deck Cards:";
@@ -52,7 +54,7 @@ function checkDeck() {
                         currentGameCard = data_json.CardsInDeck;
                         localStorage.setItem('currentGameCard',JSON.stringify(currentGameCard));
 
-                        for (card in data_json.CardsInDeck) {
+                        for (card in await data_json.CardsInDeck) {
                             if (CARDS[CARDCODE.indexOf(card)].cost < 8) {
                                 curve[CARDS[CARDCODE.indexOf(card)].cost] += data_json.CardsInDeck[card];
                             }
@@ -108,7 +110,7 @@ function checkDeck() {
                         }
                         CONTAINER.appendChild(subContainer_2)
                     }
-                }, 1000);
+                }, 100);
             }
             else if (gameState !== 'InProgress') {
                 localStorage.clear();
@@ -118,39 +120,45 @@ function checkDeck() {
                 CONTAINER.innerHTML = 'NO GAME IN PROGRESS';
             }
             let hand = data2_json.Rectangles.filter(card => card.LocalPlayer === true && card.CardID > 0 && card.CardCode !== 'face' && card.TopLeftY < data2_json.Screen.ScreenHeight/2 - card.Height*1.5).map(item => item.CardCode);
-            let board = data2_json.Rectangles.filter(card => card.LocalPlayer === true && card.CardID > 0 && card.CardCode !== 'face').map(item => item.CardCode);
-
-            if(!isEqual(hand,handCache) && handCache.length <= hand.length){
-                // draw if hand.length - handCache.length > 0
-                let cardsToDeduct = difference(hand,handCache);
-                console.log(`hand.length: ${hand.length}`);
-                console.log(`handCache.length: ${handCache.length}`);
-                console.log(cardsToDeduct);
-                for(let i = 0; i < cardsToDeduct.length; i++){
-                    if(currentGameCard[cardsToDeduct[i]]){
-                         currentGameCard[cardsToDeduct[i]] -= 1;
-                         document.getElementById(`${cardsToDeduct[i]}`).innerText = ` x ${currentGameCard[cardsToDeduct[i]]}`;
-                         drawnCards.push(cardsToDeduct[i]);
+                let board = data2_json.Rectangles.filter(card => card.LocalPlayer === true && card.CardID > 0 && card.CardCode !== 'face').map(item => item.CardCode);
+    
+                if(!isEqual(hand,handCache) && handCache.length <= hand.length){
+                    // draw if hand.length - handCache.length > 0
+                    let cardsToDeduct = difference(hand,handCache);
+                    /* console.log(`hand.length: ${hand.length}`);
+                    console.log(`handCache.length: ${handCache.length}`);
+                    console.log(cardsToDeduct);  */
+                    for(let i = 0; i < cardsToDeduct.length; i++){
+                        if(currentGameCard[cardsToDeduct[i]]){
+                            console.log(document.getElementById(`${cardsToDeduct[i]}`))
+                             currentGameCard[cardsToDeduct[i]] -= 1;
+                             document.getElementById(`${cardsToDeduct[i]}`).innerHTML = ` x ${currentGameCard[cardsToDeduct[i]]}`;
+                             drawnCards.push(cardsToDeduct[i]);
+                        }
                     }
+                    localStorage.setItem('currentGameCard',JSON.stringify(currentGameCard));
+                    localStorage.setItem('drawnCards',JSON.stringify(drawnCards));
                 }
-                localStorage.setItem('currentGameCard',JSON.stringify(currentGameCard));
-                localStorage.setItem('drawnCards',JSON.stringify(drawnCards));
 
-            }
-
-            if (hand.length!== 0) handCache = hand;
-            localStorage.setItem('handCache',JSON.stringify(handCache));
-            localStorage.setItem('Rectangles',JSON.stringify(data2_json.Rectangles));
-            localStorage.setItem('data2',JSON.stringify(data2_json));
+                if (hand.length!== 0) handCache = hand;
+                localStorage.setItem('handCache',JSON.stringify(handCache));
+                localStorage.setItem('Rectangles',JSON.stringify(data2_json.Rectangles));
+                localStorage.setItem('data2',JSON.stringify(data2_json));
+           
 
             /* let data3 = await fetch(`http://127.0.0.1:${PORT}/game-result`);
             let data3_json = await data3.json();
             */
         }
-        catch {
-            clearContainer();
-            CONTAINER.innerHTML = "Please open game!"
-            localStorage.clear();
+        catch(e) {
+            console.log(e);
+            if(e instanceof TypeError){
+                if(e.message == 'Failed to fetch'){
+                    clearContainer();
+                    CONTAINER.innerHTML = "Please open game!"
+                    localStorage.clear();
+                }
+            }
         }
 
     }, 1000);
