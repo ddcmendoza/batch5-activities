@@ -30,7 +30,7 @@ def firstNotRepeatingCharacter(s)
     if flag
         return s[ans]
     else
-        return -1
+        return '_'
     end
 end
 
