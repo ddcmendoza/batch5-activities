@@ -1,5 +1,5 @@
 def remove_vowels(s)
-    s.gsub(/[aeiou]/i,'')
+    s.gsub(/[aeiouAEIOU]/i,'')
 end
 
 
